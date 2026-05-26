@@ -343,6 +343,7 @@ export interface SemanticFinding {
   label: string;
   status: "pass" | "warning" | "fail";
   detail: string;
+  fix?: string;
 }
 
 export interface ContentGapsAnalysis {

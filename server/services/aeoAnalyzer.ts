@@ -1334,24 +1334,48 @@ class AeoAnalyzer {
       };
     }
 
-    // ── 7. Validated topic keywords — appear in headings/meta AND body ─────────
-    // Include metaDesc in the heading term set for topic validation
-    const headingTermSet = new Set([...titleTokens, ...h1Tokens, ...metaDescTokens, ...h2Tokens, ...h3Tokens]);
-
-    const topicKeywords: string[] = [];
-    for (const term of headingTermSet) {
-      const freq = bodyFreq[term] ?? 0;
-      // Short tokens (4 chars) require higher frequency to guard against fragments
-      const minFreq = term.length < 5 ? 3 : 2;
-      if (freq >= minFreq) topicKeywords.push(term);
+    // ── 7. Bigram topic keywords (2-word phrases from headings + body) ──────────
+    const allBodyTokensFull = tokenize(bodyText);
+    const bodyBigramFreq: Record<string, number> = {};
+    for (let i = 0; i < allBodyTokensFull.length - 1; i++) {
+      const w1 = allBodyTokensFull[i];
+      const w2 = allBodyTokensFull[i + 1];
+      if (w1.length >= 4 && w2.length >= 4) {
+        const bg = `${w1} ${w2}`;
+        bodyBigramFreq[bg] = (bodyBigramFreq[bg] || 0) + 1;
+      }
     }
-    // Supplement with high-frequency body-only terms (must be ≥ 5 chars to avoid fragments)
-    Object.entries(bodyFreq)
-      .filter(([w, c]) => c >= 3 && w.length >= 5 && !headingTermSet.has(w))
+
+    const allHeadingTokensCombined = [
+      ...titleTokens, ...h1Tokens, ...metaDescTokens, ...h2Tokens, ...h3Tokens,
+    ];
+    const seenBigrams = new Set<string>();
+    const topicKeywords: string[] = [];
+
+    // Heading bigrams that appear at least once in body
+    for (let i = 0; i < allHeadingTokensCombined.length - 1; i++) {
+      const w1 = allHeadingTokensCombined[i];
+      const w2 = allHeadingTokensCombined[i + 1];
+      if (w1.length >= 4 && w2.length >= 4) {
+        const bg = `${w1} ${w2}`;
+        if (!seenBigrams.has(bg) && (bodyBigramFreq[bg] ?? 0) >= 1) {
+          topicKeywords.push(bg);
+          seenBigrams.add(bg);
+        }
+      }
+    }
+
+    // High-frequency body bigrams (≥2 occurrences) not already captured
+    Object.entries(bodyBigramFreq)
+      .filter(([bg, c]) => c >= 2 && !seenBigrams.has(bg))
       .sort((a, b) => b[1] - a[1])
       .slice(0, 4)
-      .forEach(([w]) => topicKeywords.push(w));
-    const finalTopicKeywords = [...new Set(topicKeywords)].slice(0, 10);
+      .forEach(([bg]) => {
+        topicKeywords.push(bg);
+        seenBigrams.add(bg);
+      });
+
+    const finalTopicKeywords = topicKeywords.slice(0, 10);
 
     // ── 8. Implementation / service term detection ─────────────────────────────
     const implementationIndicators = new Set([
@@ -1426,13 +1450,15 @@ class AeoAnalyzer {
           findings.push({
             label: "Positioning coherence",
             status: "warning",
-            detail: `Broad positioning headline is only partially supported by specific implementation services in the body. Strengthening explicit service descriptions improves AI retrieval clarity.`,
+            detail: `Broad positioning headline is only partially supported by specific implementation services in the body (${distinctServiceTerms.size} service term found). Strengthening explicit service descriptions improves AI retrieval clarity.`,
+            fix: `Add 2–3 dedicated service sections to your page body, each with an H2 heading (e.g. "Web Development", "SEO Consulting", "Branding") followed by 2+ sentences describing what that service involves. The more explicitly you describe each capability, the better AI engines can categorise and cite your page.`,
           });
         } else {
           findings.push({
             label: "Positioning coherence",
             status: "fail",
             detail: `The positioning headline makes claims that the body content does not substantiate with specific services or capabilities. AI engines may struggle to classify this page accurately.`,
+            fix: `Add at least 3 clearly described service sections to the page body. Each should use an H2 heading naming the service, followed by a short paragraph explaining what it is and who it's for. Every capability claimed in your headline must have a corresponding content block below it.`,
           });
         }
       } else if (distinctServiceTerms.size >= 2) {
@@ -1440,6 +1466,13 @@ class AeoAnalyzer {
           label: "Positioning coherence",
           status: "pass",
           detail: `Specific headline positioning is supported by matching implementation-focused content in the page body.`,
+        });
+      } else {
+        findings.push({
+          label: "Positioning coherence",
+          status: "warning",
+          detail: `The headline describes a specific topic but the body lacks enough supporting service or implementation terms for AI engines to confidently categorise the page.`,
+          fix: `Expand the body copy with explicit descriptions of the services or topics your headline references. Aim for at least 2–3 distinct service terms backed by descriptive sentences rather than just bullet points or labels.`,
         });
       }
     }
@@ -1451,6 +1484,7 @@ class AeoAnalyzer {
           label: "H1 and title tag alignment",
           status: "fail",
           detail: `The H1 ("${h1.slice(0, 80)}${h1.length > 80 ? "…" : ""}") and the page title appear to address different topics. AI engines use both signals together — misalignment reduces citation confidence.`,
+          fix: `Align your H1 and title tag so they share at least one core keyword describing your primary service or offer. For example, if your H1 says "Web Design Agency", your title should also include "web design" or "agency". They don't need to be identical — just topically consistent.`,
         });
       } else if (h1TitleOverlap > 0 || h1MetaDescOverlap > 0) {
         findings.push({
@@ -1466,7 +1500,8 @@ class AeoAnalyzer {
       findings.push({
         label: "Implicit capabilities",
         status: "warning",
-        detail: `${navServicesNotInBody.length} service terms appear in the navigation but are not described in the page body. AI engines prioritize explicitly described capabilities over navigation labels alone.`,
+        detail: `${navServicesNotInBody.length} service terms appear in the navigation but are not described in the page body (e.g. ${navServicesNotInBody.slice(0, 2).join(", ")}). AI engines prioritize explicitly described capabilities over navigation labels alone.`,
+        fix: `For each service listed in your navigation, add a corresponding section in the page body describing what it involves. A 2–3 sentence description per service — using the service name explicitly — is enough for AI engines to register the capability as intentional rather than implied.`,
       });
     }
 
@@ -1482,7 +1517,8 @@ class AeoAnalyzer {
         findings.push({
           label: "Factual specificity",
           status: "warning",
-          detail: `No statistics, year references, project counts, or specific deliverables were detected. Adding concrete figures (e.g. "10+ years", "50+ projects") significantly improves AI retrieval confidence.`,
+          detail: `No statistics, year references, project counts, or specific deliverables were detected in the body copy. Concrete figures significantly improve AI retrieval confidence.`,
+          fix: `Add at least 2–3 data points to the page: years in business ("Since 2012"), number of clients or projects ("50+ completed projects"), or measurable results ("3× faster load times"). Even a single credible statistic meaningfully increases the likelihood that AI engines will cite your page.`,
         });
       }
     }
@@ -1492,7 +1528,8 @@ class AeoAnalyzer {
       findings.push({
         label: "Machine-readable structure",
         status: "warning",
-        detail: `No structured data markup and no definition-style paragraphs were detected. AI engines extract answers from clearly structured, self-contained text blocks. Adding JSON-LD schema or concise explanatory paragraphs improves citation potential.`,
+        detail: `No structured data markup and no definition-style paragraphs were detected. AI engines extract answers from clearly structured, self-contained text blocks.`,
+        fix: `Do one or both of the following: (1) Add a JSON-LD block in your <head> — at minimum an Organization or LocalBusiness schema describing your business — so AI crawlers can parse your identity in a machine-readable format. (2) Write at least one "definition paragraph" that directly answers "What is [your service/product]?" in 2–3 plain sentences. Both help AI engines extract and cite your content accurately.`,
       });
     }
 
