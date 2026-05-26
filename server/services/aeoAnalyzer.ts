@@ -52,7 +52,7 @@ class AeoAnalyzer {
 
     const schemaSuggestions = this.generateSchemaSuggestions($, structuredData, normalizedUrl);
     const aiSearchPreview = this.generateAiSearchPreview($, normalizedUrl);
-    const contentGaps = this.analyzeContentGaps($, contentFormat);
+    const contentGaps = this.analyzeContentGaps($, contentFormat, structuredData);
     const citationLikelihood = this.calculateCitationLikelihood(structuredData, contentFormat, authority, semantic, aiAccessibility, overallScore);
 
     const results: AeoAnalysisResults = {
@@ -1261,20 +1261,22 @@ class AeoAnalyzer {
     };
   }
 
-  private analyzeContentGaps($: cheerio.CheerioAPI, cf: ContentFormatAnalysis): ContentGapsAnalysis {
+  private analyzeContentGaps($: cheerio.CheerioAPI, cf: ContentFormatAnalysis, sd: StructuredDataAnalysis): ContentGapsAnalysis {
     // ── 1. Multi-source signal extraction ────────────────────────────────────
     const h1 = $("h1").first().text().trim();
     const metaTitle = $("title").text().trim();
+    const metaDesc = $('meta[name="description"]').attr("content") || "";
 
     const h2s: string[] = [];
-    $("h2").each((_, el) => h2s.push($(el).text().trim()));
+    $("h2").each((_, el) => { h2s.push($(el).text().trim()); });
     const h3s: string[] = [];
-    $("h3").each((_, el) => h3s.push($(el).text().trim()));
+    $("h3").each((_, el) => { h3s.push($(el).text().trim()); });
     const navText: string[] = [];
-    $("nav a, header a").each((_, el) => navText.push($(el).text().trim()));
+    $("nav a, header a").each((_, el) => { navText.push($(el).text().trim()); });
 
     const bodyText = extractMainContent($);
     const bodyLower = bodyText.toLowerCase();
+    const bodyWordCount = bodyText.split(/\s+/).filter(Boolean).length;
 
     // ── 2. Extended stop words (EN + HR) ──────────────────────────────────────
     const stopWords = new Set([
@@ -1305,6 +1307,7 @@ class AeoAnalyzer {
     const cleanTitle = metaTitle.replace(/[|\-–—].*$/, "").trim();
     const titleTokens = tokenize(cleanTitle);
     const h1Tokens = tokenize(h1);
+    const metaDescTokens = tokenize(metaDesc);
     const h2Tokens = h2s.flatMap(tokenize);
     const h3Tokens = h3s.flatMap(tokenize);
     const navTokens = navText.flatMap(tokenize);
@@ -1314,20 +1317,43 @@ class AeoAnalyzer {
     const bodyFreq: Record<string, number> = {};
     tokenize(bodyText).forEach(w => { bodyFreq[w] = (bodyFreq[w] || 0) + 1; });
 
-    // ── 6. Validated topic keywords — appear in headings AND body ─────────────
-    const headingTermSet = new Set([...titleTokens, ...h1Tokens, ...h2Tokens, ...h3Tokens]);
+    // ── 6. Confidence gate — sparse signals produce a single informational finding
+    const totalSignalTokens = h1Tokens.length + titleTokens.length + bodyTokens.length;
+    const isLowConfidence = bodyWordCount < 50 || totalSignalTokens < 8;
+
+    if (isLowConfidence) {
+      return {
+        topicKeywords: [],
+        findings: [{
+          label: "Semantic analysis",
+          status: "warning",
+          detail: "Insufficient page content to perform confident semantic coverage analysis. Ensure the page has a descriptive H1, a title tag, and at least 50 words of body copy.",
+        }],
+        coverageScore: 40,
+        coverageDetails: "More page content is needed to assess semantic coverage accurately.",
+      };
+    }
+
+    // ── 7. Validated topic keywords — appear in headings/meta AND body ─────────
+    // Include metaDesc in the heading term set for topic validation
+    const headingTermSet = new Set([...titleTokens, ...h1Tokens, ...metaDescTokens, ...h2Tokens, ...h3Tokens]);
+
     const topicKeywords: string[] = [];
     for (const term of headingTermSet) {
-      if ((bodyFreq[term] ?? 0) >= 2) topicKeywords.push(term);
+      const freq = bodyFreq[term] ?? 0;
+      // Short tokens (4 chars) require higher frequency to guard against fragments
+      const minFreq = term.length < 5 ? 3 : 2;
+      if (freq >= minFreq) topicKeywords.push(term);
     }
+    // Supplement with high-frequency body-only terms (must be ≥ 5 chars to avoid fragments)
     Object.entries(bodyFreq)
-      .filter(([w, c]) => c >= 3 && !headingTermSet.has(w))
+      .filter(([w, c]) => c >= 3 && w.length >= 5 && !headingTermSet.has(w))
       .sort((a, b) => b[1] - a[1])
       .slice(0, 4)
       .forEach(([w]) => topicKeywords.push(w));
     const finalTopicKeywords = [...new Set(topicKeywords)].slice(0, 10);
 
-    // ── 7. Implementation / service term detection ─────────────────────────────
+    // ── 8. Implementation / service term detection ─────────────────────────────
     const implementationIndicators = new Set([
       "design","development","website","application","platform","software","integration",
       "ecommerce","marketing","campaign","advertising","analytics","consulting","strategy",
@@ -1343,21 +1369,28 @@ class AeoAnalyzer {
       [...allBodyAndHeadingTokens].filter(t => implementationIndicators.has(t))
     );
 
-    // ── 8. Nav terms not described in body ────────────────────────────────────
+    // ── 9. Nav terms not described in body ────────────────────────────────────
     const navServiceTerms = navTokens.filter(t => implementationIndicators.has(t));
     const navServicesNotInBody = navServiceTerms.filter(t => !bodyLower.includes(t));
 
-    // ── 9. H1 ↔ title semantic alignment ─────────────────────────────────────
+    // ── 10. H1 ↔ title semantic alignment (meta description as supporting signal)
     const h1TitleOverlap = h1Tokens.filter(t => titleTokens.includes(t)).length;
+    // Also count overlap with meta description tokens as weak alignment support
+    const h1MetaDescOverlap = h1Tokens.filter(t => metaDescTokens.includes(t)).length;
     const hasMismatch =
-      h1Tokens.length >= 2 && titleTokens.length >= 2 && h1TitleOverlap === 0;
+      h1Tokens.length >= 2 && titleTokens.length >= 2 &&
+      h1TitleOverlap === 0 && h1MetaDescOverlap === 0;
 
-    // ── 10. Factual clarity signals ───────────────────────────────────────────
+    // ── 11. Factual clarity signals ───────────────────────────────────────────
     const hasFactuals =
       /\b\d{4}\b|\b\d+[%+]\b|\b\d+\s*(years?|clients?|projects?|cases?)\b/i.test(bodyText) ||
       /\b(since|founded|established|over \d+)\b/i.test(bodyText);
 
-    // ── 11. Semantic alignment score (0–100) ──────────────────────────────────
+    // ── 12. Machine-readable structure signals ───────────────────────────────
+    const hasStructuredData = sd.jsonLdPresent || sd.microdataPresent || sd.totalSchemaCount > 0;
+    const hasDefinitionContent = cf.directAnswerParagraphs > 0 || cf.hasDefinitions;
+
+    // ── 13. Semantic alignment score (0–100) ──────────────────────────────────
     let alignmentScore = 50;
     if (distinctServiceTerms.size >= 3) alignmentScore += 20;
     else if (distinctServiceTerms.size >= 1) alignmentScore += 8;
@@ -1365,10 +1398,13 @@ class AeoAnalyzer {
     if (!hasMismatch && h1.length > 0 && metaTitle.length > 0) alignmentScore += 12;
     else if (hasMismatch) alignmentScore -= 15;
     if (hasFactuals) alignmentScore += 10;
-    if (cf.directAnswerParagraphs > 0) alignmentScore += 8;
+    if (hasDefinitionContent) alignmentScore += 8;
+    if (hasStructuredData) alignmentScore += 5;
+    // Meta description contribution: alignment bonus when metaDesc tokens overlap with H1
+    if (h1MetaDescOverlap > 0) alignmentScore += 5;
     alignmentScore = Math.min(100, Math.max(0, alignmentScore));
 
-    // ── 12. Generate semantic findings ────────────────────────────────────────
+    // ── 14. Generate semantic findings ────────────────────────────────────────
     const findings: ContentGapsAnalysis["findings"] = [];
 
     // Check 1: Positioning breadth vs. body specificity
@@ -1416,11 +1452,11 @@ class AeoAnalyzer {
           status: "fail",
           detail: `The H1 ("${h1.slice(0, 80)}${h1.length > 80 ? "…" : ""}") and the page title appear to address different topics. AI engines use both signals together — misalignment reduces citation confidence.`,
         });
-      } else if (h1TitleOverlap > 0) {
+      } else if (h1TitleOverlap > 0 || h1MetaDescOverlap > 0) {
         findings.push({
           label: "H1 and title tag alignment",
           status: "pass",
-          detail: `The H1 and title tag share semantic terms, reinforcing a consistent topical signal for AI retrieval systems.`,
+          detail: `The H1, title tag, and meta description share semantic terms, reinforcing a consistent topical signal for AI retrieval systems.`,
         });
       }
     }
@@ -1435,7 +1471,7 @@ class AeoAnalyzer {
     }
 
     // Check 4: Factual specificity
-    if (bodyText.split(/\s+/).length > 100) {
+    if (bodyWordCount > 100) {
       if (hasFactuals) {
         findings.push({
           label: "Factual specificity",
@@ -1451,16 +1487,16 @@ class AeoAnalyzer {
       }
     }
 
-    // Check 5: Machine-readable content structure
-    if (cf.directAnswerParagraphs === 0 && cf.faqSections === 0) {
+    // Check 5: Machine-readable structure (requires BOTH no structured data AND no definition content)
+    if (!hasStructuredData && !hasDefinitionContent) {
       findings.push({
         label: "Machine-readable structure",
         status: "warning",
-        detail: `No definition-style paragraphs or FAQ sections detected. AI engines extract answers from clearly structured, self-contained text blocks. Adding concise explanatory paragraphs improves citation potential.`,
+        detail: `No structured data markup and no definition-style paragraphs were detected. AI engines extract answers from clearly structured, self-contained text blocks. Adding JSON-LD schema or concise explanatory paragraphs improves citation potential.`,
       });
     }
 
-    // ── 13. Summary sentence ──────────────────────────────────────────────────
+    // ── 15. Summary sentence ──────────────────────────────────────────────────
     const failCount = findings.filter(f => f.status === "fail").length;
     const warnCount = findings.filter(f => f.status === "warning").length;
     const passCount = findings.filter(f => f.status === "pass").length;
