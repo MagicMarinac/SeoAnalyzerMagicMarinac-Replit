@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ArrowRight, FileText, Sparkles, Repeat, CheckCircle2, Code2 } from "lucide-react";
+import { ArrowRight, FileText, Repeat, CheckCircle2, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function UpgradeCta() {
@@ -31,9 +31,8 @@ export function UpgradeCta() {
 
         <div className="relative px-6 md:px-12 py-12 md:py-14 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-10 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-5 bg-white/15 backdrop-blur ring-1 ring-white/30">
-              <Sparkles className="w-3.5 h-3.5" strokeWidth={2.4} />
-              <span className="text-[11px] font-semibold tracking-wide uppercase">
+            <div className="mb-5">
+              <span className="text-sm font-semibold text-blue-50/95">
                 {t("upgradeCta.eyebrow")}
               </span>
             </div>

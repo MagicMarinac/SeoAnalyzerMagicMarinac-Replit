@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
-  Zap,
   Crown,
   CheckCircle2,
   AlertCircle,
@@ -40,11 +39,10 @@ export function HeroSection() {
         {/* LEFT — copy + CTA */}
         <div>
           <div
-            className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-6 bg-primary/10 text-primary border border-primary/20"
+            className="mb-6 text-primary"
             data-testid="hero-eyebrow"
           >
-            <Zap className="w-3.5 h-3.5" strokeWidth={2.4} />
-            <span className="text-[11px] font-semibold tracking-wide uppercase">
+            <span className="text-sm font-semibold">
               {t("hero.eyebrow")}
             </span>
           </div>
