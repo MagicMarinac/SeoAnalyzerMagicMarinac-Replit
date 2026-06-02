@@ -4310,7 +4310,7 @@ export default function MasterAnalyzerPage() {
       <HeroSection />
 
       <div className="container mx-auto px-4 py-8">
-        <Card id="scanner" className="mb-8 border-primary/20 shadow-lg scroll-mt-6">
+        <Card id="scanner" className="mb-8 border-primary/20 shadow-lg scroll-mt-6 bg-[#f5f5f5]">
           <CardContent className="pt-6">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col md:flex-row gap-3">
@@ -4322,7 +4322,7 @@ export default function MasterAnalyzerPage() {
                       <FormControl>
                         <Input
                           placeholder={t('form.placeholder')}
-                          className="h-12 text-lg"
+                          className="h-12 text-lg bg-white"
                           {...field}
                           data-testid="master-url"
                         />
@@ -4418,7 +4418,7 @@ export default function MasterAnalyzerPage() {
                             className="h-8 w-40 text-xs font-mono"
                             data-testid="input-access-code"
                           />
-                          <Button size="sm" variant="outline" onClick={handleRedeemCode} disabled={codeRedeeming || !accessCode.trim()} className="h-8 text-xs" data-testid="button-redeem-activate">
+                          <Button size="sm" variant="outline" onClick={handleRedeemCode} disabled={codeRedeeming || !accessCode.trim()} className="h-8 text-xs bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:text-emerald-800" data-testid="button-redeem-activate">
                             {codeRedeeming ? <Loader2 className="w-3 h-3 animate-spin" /> : t('accessCode.activate')}
                           </Button>
                           <Button size="sm" variant="ghost" onClick={() => { setShowAccessCodeInput(false); setAccessCode(''); setRedeemEmail(''); }} className="h-8 text-xs text-muted-foreground" data-testid="button-redeem-cancel">
@@ -4428,7 +4428,7 @@ export default function MasterAnalyzerPage() {
                       )}
                     </div>
                   ) : (
-                    <Button size="sm" variant="ghost" onClick={() => setShowAccessCodeInput(true)} className="h-8 text-xs text-muted-foreground hover:text-foreground">
+                    <Button size="sm" variant="ghost" onClick={() => setShowAccessCodeInput(true)} className="h-8 text-xs text-foreground bg-accent">
                       <KeyRound className="w-3.5 h-3.5 mr-1.5" />
                       {t('accessCode.haveCode')}
                     </Button>
