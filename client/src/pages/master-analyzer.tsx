@@ -4428,7 +4428,7 @@ export default function MasterAnalyzerPage() {
                       )}
                     </div>
                   ) : (
-                    <Button size="sm" variant="ghost" onClick={() => setShowAccessCodeInput(true)} className="h-8 text-xs text-foreground bg-[#dfe8f1] dark:bg-accent">
+                    <Button size="sm" variant="ghost" onClick={() => setShowAccessCodeInput(true)} className="h-8 text-xs text-foreground bg-[#dfe8f1] hover:bg-[#cddbe9] dark:bg-accent dark:hover:bg-[#2b3b55]">
                       <KeyRound className="w-3.5 h-3.5 mr-1.5" />
                       {t('accessCode.haveCode')}
                     </Button>
