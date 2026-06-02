@@ -4310,7 +4310,7 @@ export default function MasterAnalyzerPage() {
       <HeroSection />
 
       <div className="container mx-auto px-4 py-8">
-        <Card id="scanner" className="mb-8 border-primary/20 shadow-lg scroll-mt-6 bg-[#f5f5f5]">
+        <Card id="scanner" className="mb-8 border-primary/20 shadow-lg scroll-mt-6 bg-[#f5f5f5] dark:bg-card">
           <CardContent className="pt-6">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col md:flex-row gap-3">
@@ -4322,7 +4322,7 @@ export default function MasterAnalyzerPage() {
                       <FormControl>
                         <Input
                           placeholder={t('form.placeholder')}
-                          className="h-12 text-lg bg-white"
+                          className="h-12 text-lg bg-white dark:bg-background"
                           {...field}
                           data-testid="master-url"
                         />
@@ -4407,7 +4407,7 @@ export default function MasterAnalyzerPage() {
                             value={redeemEmail}
                             onChange={(e) => setRedeemEmail(e.target.value)}
                             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleRedeemCode(); } }}
-                            className="h-8 w-48 text-xs bg-white"
+                            className="h-8 w-48 text-xs bg-white dark:bg-background"
                             data-testid="input-redeem-email"
                           />
                           <Input
@@ -4415,10 +4415,10 @@ export default function MasterAnalyzerPage() {
                             value={accessCode}
                             onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
                             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleRedeemCode(); } }}
-                            className="h-8 w-40 text-xs font-mono bg-white"
+                            className="h-8 w-40 text-xs font-mono bg-white dark:bg-background"
                             data-testid="input-access-code"
                           />
-                          <Button size="sm" variant="outline" onClick={handleRedeemCode} disabled={codeRedeeming || !accessCode.trim()} className="h-8 text-xs bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:text-emerald-800" data-testid="button-redeem-activate">
+                          <Button size="sm" variant="outline" onClick={handleRedeemCode} disabled={codeRedeeming || !accessCode.trim()} className="h-8 text-xs bg-emerald-50 dark:bg-emerald-500/15 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-300 border-emerald-200" data-testid="button-redeem-activate">
                             {codeRedeeming ? <Loader2 className="w-3 h-3 animate-spin" /> : t('accessCode.activate')}
                           </Button>
                           <Button size="sm" variant="ghost" onClick={() => { setShowAccessCodeInput(false); setAccessCode(''); setRedeemEmail(''); }} className="h-8 text-xs text-muted-foreground" data-testid="button-redeem-cancel">
