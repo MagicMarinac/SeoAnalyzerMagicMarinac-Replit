@@ -32,7 +32,7 @@ export default function CategoryCards({ analysis, onViewDetails }: CategoryCards
       ],
     },
     {
-      name: t("seo.performance"),
+      name: t("seoAudit.performance"),
       tab: "performance",
       score: analysis.performanceScore,
       icon: Gauge,
@@ -44,7 +44,7 @@ export default function CategoryCards({ analysis, onViewDetails }: CategoryCards
       ],
     },
     {
-      name: t("seo.accessibility"),
+      name: t("seoAudit.accessibility"),
       tab: "accessibility",
       score: analysis.accessibilityScore,
       icon: Shield,
@@ -56,7 +56,7 @@ export default function CategoryCards({ analysis, onViewDetails }: CategoryCards
       ],
     },
     {
-      name: t("seo.keywords"),
+      name: t("seoAudit.keywords"),
       tab: "keywords",
       score: analysis.keywordScore,
       icon: Search,

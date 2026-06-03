@@ -60,7 +60,7 @@ export default function AnalysisResults({ analysis }: AnalysisResultsProps) {
             <div className="flex items-center space-x-6">
               <ProgressRing value={analysis.overallScore} />
               <div>
-                <h3 className="text-2xl font-bold text-foreground">{t("seo.overallScore")}</h3>
+                <h3 className="text-2xl font-bold text-foreground">{t("seoAudit.overallScore")}</h3>
                 <p className="text-muted-foreground">{getScoreDescription(analysis.overallScore)}</p>
                 <p className="text-sm text-muted-foreground mt-1" data-testid="text-analyzed-url">
                   {analysis.url}

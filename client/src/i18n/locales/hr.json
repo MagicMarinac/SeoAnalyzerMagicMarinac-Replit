@@ -118,7 +118,7 @@
     "issuesFound": "{{count}} problema pronađeno",
     "moreHidden": "+ {{count}} skrivenih problema — otključajte za prikaz svih"
   },
-  "seo": {
+  "seoAudit": {
     "overallScore": "Ukupni SEO rezultat",
     "technical": "Tehničko",
     "performance": "Performanse",

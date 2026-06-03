@@ -514,18 +514,18 @@ function SeoSummary({ data }: { data: SeoAnalysis }) {
       <div className="flex items-center gap-4">
         <ProgressRing value={data.overallScore} size={80} strokeWidth={8} />
         <div>
-          <h3 className="text-xl font-bold">{t('seo.overallScore')}</h3>
+          <h3 className="text-xl font-bold">{t('seoAudit.overallScore')}</h3>
           <p className="text-sm text-muted-foreground">{data.url}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: t('seo.technical'), score: data.technicalScore, icon: Server, color: "#3b82f6" },
-          { label: t('seo.performance'), score: data.performanceScore, icon: Zap, color: "#f59e0b" },
-          { label: t('seo.accessibility'), score: data.accessibilityScore, icon: Eye, color: "#10b981" },
-          { label: t('seo.keywords'), score: data.keywordScore, icon: Search, color: "#8b5cf6" },
-          { label: t('seo.content'), score: data.contentScore, icon: FileText, color: "#ec4899" },
+          { label: t('seoAudit.technical'), score: data.technicalScore, icon: Server, color: "#3b82f6" },
+          { label: t('seoAudit.performance'), score: data.performanceScore, icon: Zap, color: "#f59e0b" },
+          { label: t('seoAudit.accessibility'), score: data.accessibilityScore, icon: Eye, color: "#10b981" },
+          { label: t('seoAudit.keywords'), score: data.keywordScore, icon: Search, color: "#8b5cf6" },
+          { label: t('seoAudit.content'), score: data.contentScore, icon: FileText, color: "#ec4899" },
         ].map((cat) => {
           const CatIcon = cat.icon;
           return (
@@ -544,9 +544,9 @@ function SeoSummary({ data }: { data: SeoAnalysis }) {
       </div>
 
       <div className="flex gap-3">
-        <Badge variant="outline" className="text-green-600">{passCount} {t('seo.passed')}</Badge>
-        <Badge variant="outline" className="text-red-600">{failCount} {t('seo.failed')}</Badge>
-        <Badge variant="outline" className="text-yellow-600">{warnCount} {t('seo.warnings')}</Badge>
+        <Badge variant="outline" className="text-green-600">{passCount} {t('seoAudit.passed')}</Badge>
+        <Badge variant="outline" className="text-red-600">{failCount} {t('seoAudit.failed')}</Badge>
+        <Badge variant="outline" className="text-yellow-600">{warnCount} {t('seoAudit.warnings')}</Badge>
       </div>
 
       {(() => {
@@ -566,20 +566,20 @@ function SeoSummary({ data }: { data: SeoAnalysis }) {
                 </div>
                 <div className="flex-1">
                   <h4 className="font-bold text-foreground flex items-center gap-2">
-                    {t('seo.trafficPotential')}
-                    <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 text-[10px]">{t('seo.basedOnIssues', { count: failCount + warnCount })}</Badge>
+                    {t('seoAudit.trafficPotential')}
+                    <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 text-[10px]">{t('seoAudit.basedOnIssues', { count: failCount + warnCount })}</Badge>
                   </h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {t('seo.trafficImprovement', { low: trafficBoostLow, high: trafficBoostHigh })}
+                    {t('seoAudit.trafficImprovement', { low: trafficBoostLow, high: trafficBoostHigh })}
                   </p>
                   <div className="mt-3 flex items-center gap-4">
                     <div className="bg-white dark:bg-emerald-950 rounded-lg px-4 py-2 border border-emerald-200 dark:border-emerald-800">
-                      <p className="text-xs text-muted-foreground">{t('seo.monthlyTraffic')}</p>
+                      <p className="text-xs text-muted-foreground">{t('seoAudit.monthlyTraffic')}</p>
                       <p className="text-lg font-bold text-emerald-600">€{monthlyValue}–€{monthlyValueHigh}</p>
-                      <p className="text-[10px] text-muted-foreground">{t('seo.basedOnAvg')}</p>
+                      <p className="text-[10px] text-muted-foreground">{t('seoAudit.basedOnAvg')}</p>
                     </div>
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-2 italic">{t('seo.disclaimer')}</p>
+                  <p className="text-[10px] text-muted-foreground mt-2 italic">{t('seoAudit.disclaimer')}</p>
                 </div>
               </div>
             </CardContent>
@@ -612,11 +612,11 @@ function SeoSection({ data, url, paidTier, onUpgrade }: { data: SeoAnalysis; url
       ) : (
         <Tabs defaultValue="technical" className="w-full">
           <TabsList className="flex-wrap h-auto">
-            <TabsTrigger value="technical">{t('seo.technical')}</TabsTrigger>
-            <TabsTrigger value="performance">{t('seo.performance')}</TabsTrigger>
-            <TabsTrigger value="accessibility">{t('seo.accessibility')}</TabsTrigger>
-            <TabsTrigger value="keywords">{t('seo.keywords')}</TabsTrigger>
-            <TabsTrigger value="content">{t('seo.content')}</TabsTrigger>
+            <TabsTrigger value="technical">{t('seoAudit.technical')}</TabsTrigger>
+            <TabsTrigger value="performance">{t('seoAudit.performance')}</TabsTrigger>
+            <TabsTrigger value="accessibility">{t('seoAudit.accessibility')}</TabsTrigger>
+            <TabsTrigger value="keywords">{t('seoAudit.keywords')}</TabsTrigger>
+            <TabsTrigger value="content">{t('seoAudit.content')}</TabsTrigger>
             <TabsTrigger value="compare">{t('tabs.compare')}</TabsTrigger>
           </TabsList>
 
@@ -735,7 +735,7 @@ function SeoPerformanceTab({ performance, paidTier }: { performance: Performance
 
 function SeoAccessibilityTab({ checks, paidTier }: { checks: AccessibilityCheck[]; paidTier: string }) {
   const { t } = useTranslation();
-  if (!checks || checks.length === 0) return <p className="text-sm text-muted-foreground p-4">{t('master.seo.accessibilityNotAvailable')}</p>;
+  if (!checks || checks.length === 0) return <p className="text-sm text-muted-foreground p-4">{t('master.seoAudit.accessibilityNotAvailable')}</p>;
 
   const passCount = checks.filter(c => c.status === "PASS").length;
   const score = Math.round((passCount / checks.length) * 100);
@@ -998,11 +998,11 @@ function SeoCompareTab({ url }: { url: string }) {
   };
 
   const categoryLabels = [
-    { key: "technicalScore", label: t('seo.technical') },
-    { key: "performanceScore", label: t('seo.performance') },
-    { key: "accessibilityScore", label: t('seo.accessibility') },
-    { key: "keywordScore", label: t('seo.keywords') },
-    { key: "contentScore", label: t('seo.content') },
+    { key: "technicalScore", label: t('seoAudit.technical') },
+    { key: "performanceScore", label: t('seoAudit.performance') },
+    { key: "accessibilityScore", label: t('seoAudit.accessibility') },
+    { key: "keywordScore", label: t('seoAudit.keywords') },
+    { key: "contentScore", label: t('seoAudit.content') },
   ];
 
   return (

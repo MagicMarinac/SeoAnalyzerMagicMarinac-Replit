@@ -75,8 +75,8 @@ const DetailedAnalysis = forwardRef<HTMLDivElement, DetailedAnalysisProps>(funct
     { key: "technical" as TabType, label: t("legacy.detailedAnalysis.tabs.technical"), icon: Settings },
     { key: "keywords" as TabType, label: t("legacy.detailedAnalysis.tabs.keywords"), icon: Search },
     { key: "content" as TabType, label: t("legacy.detailedAnalysis.tabs.content"), icon: FileText },
-    { key: "performance" as TabType, label: t("seo.performance"), icon: Gauge },
-    { key: "accessibility" as TabType, label: t("seo.accessibility"), icon: Shield },
+    { key: "performance" as TabType, label: t("seoAudit.performance"), icon: Gauge },
+    { key: "accessibility" as TabType, label: t("seoAudit.accessibility"), icon: Shield },
   ];
 
   const getStatusLabel = (status: string) => {
