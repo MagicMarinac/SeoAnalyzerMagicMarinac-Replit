@@ -48,6 +48,7 @@ if (typeof window !== "undefined") {
 
 i18n.on("languageChanged", (lng) => {
   try { localStorage.setItem("lang", lng); } catch { /* noop */ }
+  try { document.cookie = `lang=${lng}; path=/; max-age=31536000; SameSite=Lax`; } catch { /* noop */ }
   syncHtmlLang(lng);
 });
 

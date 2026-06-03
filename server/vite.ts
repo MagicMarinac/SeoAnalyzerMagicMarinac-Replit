@@ -19,6 +19,42 @@ export function log(message: string, source = "express") {
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
+function parseCookieLang(cookieHeader: string | undefined): "en" | "hr" | null {
+  if (!cookieHeader) return null;
+  const match = cookieHeader.match(/(?:^|;\s*)lang=([^;]+)/);
+  if (!match) return null;
+  const val = match[1].trim();
+  if (val === "hr") return "hr";
+  if (val === "en") return "en";
+  return null;
+}
+
+function detectLang(req: express.Request): "en" | "hr" {
+  const fromCookie = parseCookieLang(req.headers.cookie);
+  if (fromCookie) return fromCookie;
+  const acceptLang = (req.headers["accept-language"] || "") as string;
+  if (acceptLang.toLowerCase().includes("hr")) return "hr";
+  return "en";
+}
+
+async function loadStaticContent(lang: "en" | "hr"): Promise<string> {
+  const filename = `${lang}.html`;
+  const candidates = [
+    path.resolve(import.meta.dirname, "static_content", filename),
+    path.resolve(import.meta.dirname, "..", "server", "static_content", filename),
+    path.resolve(process.cwd(), "server", "static_content", filename),
+  ];
+  for (const candidate of candidates) {
+    try {
+      return await fs.promises.readFile(candidate, "utf-8");
+    } catch {
+      // try next candidate
+    }
+  }
+  console.warn(`[static-content] Could not load ${filename} from any candidate path`);
+  return "";
+}
+
 export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
@@ -52,14 +88,18 @@ export async function setupVite(app: Express, server: Server) {
         "index.html",
       );
 
-      // always reload the index.html file from disk incase it changes
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
       template = template.replace(
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
       const page = await vite.transformIndexHtml(url, template);
-      res.status(200).set({ "Content-Type": "text/html" }).end(page);
+
+      const lang = detectLang(req);
+      const staticContent = await loadStaticContent(lang);
+      const finalPage = page.replace("<!--static-content-->", staticContent);
+
+      res.status(200).set({ "Content-Type": "text/html" }).end(finalPage);
     } catch (e) {
       vite.ssrFixStacktrace(e as Error);
       next(e);
@@ -78,8 +118,18 @@ export function serveStatic(app: Express) {
 
   app.use(express.static(distPath));
 
-  // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  app.use("*", async (req, res) => {
+    try {
+      const html = await fs.promises.readFile(
+        path.resolve(distPath, "index.html"),
+        "utf-8",
+      );
+      const lang = detectLang(req);
+      const staticContent = await loadStaticContent(lang);
+      const page = html.replace("<!--static-content-->", staticContent);
+      res.status(200).set({ "Content-Type": "text/html" }).send(page);
+    } catch {
+      res.status(500).send("Internal server error");
+    }
   });
 }
