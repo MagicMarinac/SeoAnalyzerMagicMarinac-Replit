@@ -1063,6 +1063,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.type("application/xml").set("Cache-Control", "public, max-age=3600").send(body);
   });
 
+  app.get("/api/ai/knowledge.json", (_req, res) => {
+    const knowledge = {
+      company: {
+        name: "FreeSiteAnalyzer",
+        url: SITE_ORIGIN,
+        description: "Free website analyzer for SEO, AEO, GEO and Google Ads landing-page experience.",
+        slogan: "Scan. Snap. Fix What Matters.",
+        languages: ["en", "hr"],
+      },
+      tools: [
+        { name: "SEO Analyzer", description: "Titles, meta tags, headings, structured data, internal links, images, sitemap, robots.txt, and Core Web Vitals signals." },
+        { name: "Google Ads Landing Page Experience", description: "TTFB, CDN, cache headers, redirects, hosting quality, mobile UX, and ad-copy quality signals." },
+        { name: "AEO (Answer Engine Optimization)", description: "Structured data completeness, citation likelihood, AI search preview readiness, schema generator, and semantic content gaps." },
+        { name: "GEO (Generative Engine Optimization)", description: "Readiness for ChatGPT, Perplexity, and Google AI Overviews — authority, fluency, unique value, and entity optimization." },
+        { name: "Broken Link Checker", description: "Identifies broken, redirected, and working links across the page, filtering CDN URLs." },
+        { name: "Image Optimization", description: "Alt text presence, lazy loading, explicit dimensions, modern formats (WebP/AVIF), and file size checks." },
+        { name: "Internal Linking Analysis", description: "Anchor text quality, nofollow attributes, and link depth analysis." },
+        { name: "Sitemap & Robots.txt Validator", description: "Parses and validates sitemap structure and robots.txt directives." },
+      ],
+      pricing: [
+        {
+          tier: "Free",
+          price: 0,
+          currency: "EUR",
+          scans: 3,
+          scan_period: "per day per IP",
+          features: ["Overall scores", "Top issues preview", "Free PDF report (email required)"],
+        },
+        {
+          tier: "Basic",
+          price: 19,
+          currency: "EUR",
+          scans: 5,
+          scan_period: "per access code (never expires)",
+          features: ["Full audit data", "All checks", "Basic PDF report"],
+        },
+        {
+          tier: "Pro",
+          price: 29,
+          currency: "EUR",
+          scans: 10,
+          scan_period: "per access code (never expires)",
+          features: ["Full audit data", "All checks", "Copy-paste fix instructions", "Technical fix guides with code examples", "Pro PDF report"],
+        },
+      ],
+      faq: [
+        { q: "Does it require an account or login?", a: "No. There are no user accounts or passwords. Access codes are the only credential — enter the code to restore paid access from any device." },
+        { q: "Do access codes expire?", a: "No. Codes never expire. Basic codes include 5 scans, Pro codes include 10. Once all scans are used the code is depleted." },
+        { q: "What URLs can I analyze?", a: "Any publicly accessible URL. Enter the domain without https:// and the system auto-normalizes it." },
+        { q: "Is there a free tier?", a: "Yes. 3 analyses per IP per 24-hour rolling window with no access code needed, showing overall scores and top issues." },
+        { q: "Can I use the same code on multiple devices?", a: "Yes. Access codes are stored in the cloud and work from any browser or device." },
+        { q: "What languages is the UI available in?", a: "English (en) and Croatian (hr). Language is detected automatically and can be toggled in the header." },
+      ],
+      structured_data: {
+        knowledge_endpoint: `${SITE_ORIGIN}/api/ai/knowledge.json`,
+        llms_txt: `${SITE_ORIGIN}/llms.txt`,
+        sitemap: `${SITE_ORIGIN}/sitemap.xml`,
+        robots_txt: `${SITE_ORIGIN}/robots.txt`,
+      },
+    };
+    res
+      .set("Content-Type", "application/json")
+      .set("Access-Control-Allow-Origin", "*")
+      .set("Cache-Control", "public, max-age=3600")
+      .json(knowledge);
+  });
+
   app.get("/llms.txt", (_req, res) => {
     const body =
       `# FreeSiteAnalyzer\n` +
@@ -1082,6 +1149,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       `- Sitemap: ${SITE_ORIGIN}/sitemap.xml\n` +
       `- Privacy: ${SITE_ORIGIN}/privacy-policy\n` +
       `- Terms: ${SITE_ORIGIN}/terms-of-service\n\n` +
+      `## Structured Data\n` +
+      `${SITE_ORIGIN}/api/ai/knowledge.json\n\n` +
       `## Languages\n` +
       `English (en) and Croatian (hr). Append ?lang=hr for the Croatian version.\n`;
     res.type("text/plain; charset=utf-8").set("Cache-Control", "public, max-age=3600").send(body);
