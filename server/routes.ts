@@ -1161,6 +1161,170 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.type("text/plain; charset=utf-8").set("Cache-Control", "public, max-age=3600").send(body);
   });
 
+  app.get("/llms-full.txt", (_req, res) => {
+    const body =
+      `# FreeSiteAnalyzer\n` +
+      `> Free website analyzer for SEO, AEO, GEO and Google Ads landing-page experience.\n` +
+      `> Slogan: Scan. Snap. Fix What Matters.\n` +
+      `> URL: ${SITE_ORIGIN}\n` +
+      `> Languages: English (en), Croatian (hr)\n\n` +
+      `FreeSiteAnalyzer is a single-page SaaS tool that runs eight specialized audits from a single URL input. ` +
+      `It covers technical SEO, Answer Engine Optimization (AEO), Generative Engine Optimization (GEO), ` +
+      `Google Ads landing-page experience, broken link detection, image optimization, internal linking, and sitemap/robots.txt validation. ` +
+      `Results are displayed immediately on-screen; downloadable PDF reports with copy-paste fix instructions are available on paid tiers.\n\n` +
+      `## Tools\n\n` +
+      `### SEO Analyzer\n` +
+      `Checks title tags, meta descriptions, heading hierarchy (H1–H6), canonical tags, hreflang, Open Graph, Twitter Card, ` +
+      `structured data (JSON-LD), internal links, image alt text, sitemap presence, robots.txt directives, and Core Web Vitals signals (LCP, CLS, FID/INP via CrUX API).\n\n` +
+      `### Google Ads Landing Page Experience\n` +
+      `Evaluates TTFB, CDN usage, cache headers, redirect chains, hosting quality, HTTPS enforcement, mobile UX signals, ` +
+      `and ad-copy quality rater signals relevant to Google Ads Quality Score.\n\n` +
+      `### AEO — Answer Engine Optimization\n` +
+      `Assesses structured data completeness (FAQ, HowTo, Article, Product schemas), citation likelihood in AI search previews, ` +
+      `semantic content gap detection, schema generator tool, and AI search readiness score.\n\n` +
+      `### GEO — Generative Engine Optimization\n` +
+      `Measures readiness for ChatGPT, Perplexity, Google AI Overviews, and similar generative engines. ` +
+      `Checks authority signals, content fluency, unique value proposition, entity optimization, and citation-worthiness.\n\n` +
+      `### Broken Link Checker\n` +
+      `Crawls all links on the page and classifies each as working, redirected, or broken. CDN and asset URLs are filtered out.\n\n` +
+      `### Image Optimization\n` +
+      `Checks alt text presence, lazy loading attributes, explicit width/height dimensions, modern format usage (WebP/AVIF), ` +
+      `and estimated file size impact on page weight.\n\n` +
+      `### Internal Linking Analysis\n` +
+      `Evaluates anchor text quality, nofollow attributes, link depth from the homepage, and internal link equity distribution. CDN URLs are filtered.\n\n` +
+      `### Sitemap & Robots.txt Validator\n` +
+      `Parses and validates sitemap.xml structure (including nested sitemaps) and robots.txt directives. ` +
+      `Reports missing, malformed, or conflicting entries.\n\n` +
+      `## Pricing\n\n` +
+      `All prices are one-time payments. No subscriptions. No expiry on access codes.\n\n` +
+      `### Free\n` +
+      `- Price: €0\n` +
+      `- Scans: 3 per IP per 24-hour rolling window\n` +
+      `- Access: No code needed\n` +
+      `- Includes: Overall scores, top issues preview, free PDF report (email required)\n\n` +
+      `### Basic — €19\n` +
+      `- Price: €19 one-time\n` +
+      `- Scans: 5 scans per access code (never expires)\n` +
+      `- Includes: Full audit data, all checks, Basic PDF report (no fix instructions)\n\n` +
+      `### Pro — €29\n` +
+      `- Price: €29 one-time\n` +
+      `- Scans: 10 scans per access code (never expires)\n` +
+      `- Includes: Full audit data, all checks, copy-paste fix instructions, technical fix guides with code examples, Pro PDF report\n\n` +
+      `## Access & Authentication\n\n` +
+      `FreeSiteAnalyzer has no user accounts, passwords, or email logins. Access codes (e.g. PRO-7X9K2M) are the only credential. ` +
+      `Codes are stored in Firebase Firestore, work from any browser or device, and never expire until all scans are used. ` +
+      `On-screen results persist for the browser session; re-enter your code after a refresh to restore paid access.\n\n` +
+      `## Technical Stack\n\n` +
+      `- Frontend: React 18, TypeScript, Vite, Shadcn/ui, Tailwind CSS, TanStack Query, i18next (EN/HR)\n` +
+      `- Backend: Node.js, Express.js, TypeScript (ESM), Cheerio, PDFKit\n` +
+      `- Database: Firebase Firestore (persistent), in-memory Maps (ephemeral sessions, 24h TTL)\n` +
+      `- Payments: myPOS Checkout (RSA-signed IPCPurchase)\n` +
+      `- Email: Mailchimp Marketing API v3\n` +
+      `- Bot protection: Cloudflare Turnstile\n\n` +
+      `## Key URLs\n\n` +
+      `- Home: ${SITE_ORIGIN}/\n` +
+      `- Privacy Policy: ${SITE_ORIGIN}/privacy-policy\n` +
+      `- Terms of Service: ${SITE_ORIGIN}/terms-of-service\n` +
+      `- Refund & Cancellation Policy: ${SITE_ORIGIN}/refund-cancellation-policy\n` +
+      `- Delivery & Fulfilment: ${SITE_ORIGIN}/delivery-fulfillment\n` +
+      `- Sitemap: ${SITE_ORIGIN}/sitemap.xml\n` +
+      `- Robots: ${SITE_ORIGIN}/robots.txt\n\n` +
+      `## AI & Machine Learning Resources\n\n` +
+      `- Concise summary (llmstxt.org): ${SITE_ORIGIN}/llms.txt\n` +
+      `- Full summary (this file): ${SITE_ORIGIN}/llms-full.txt\n` +
+      `- Structured knowledge endpoint: ${SITE_ORIGIN}/api/ai/knowledge.json\n` +
+      `- LLM info JSON: ${SITE_ORIGIN}/llm-info.json\n\n` +
+      `## Languages\n\n` +
+      `English (en) is the default. Croatian (hr) is fully supported. ` +
+      `The UI language can be toggled in the header and is persisted via localStorage. ` +
+      `PDF reports are generated in the active UI language. ` +
+      `Append ?lang=hr to any page URL for the Croatian version.\n`;
+    res.type("text/plain; charset=utf-8").set("Cache-Control", "public, max-age=3600").send(body);
+  });
+
+  app.get("/llm-info.json", (_req, res) => {
+    const info = {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "FreeSiteAnalyzer",
+      url: SITE_ORIGIN,
+      slogan: "Scan. Snap. Fix What Matters.",
+      description: "Free website analyzer for SEO, AEO, GEO and Google Ads landing-page experience. Runs eight specialized audits from a single URL input and returns copy-paste fix instructions.",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      inLanguage: ["en", "hr"],
+      offers: [
+        {
+          "@type": "Offer",
+          name: "Free",
+          price: "0",
+          priceCurrency: "EUR",
+          description: "3 scans per IP per 24 hours. Overall scores and top issues. Free PDF report with email."
+        },
+        {
+          "@type": "Offer",
+          name: "Basic",
+          price: "19",
+          priceCurrency: "EUR",
+          description: "5 scans per access code, never expires. Full audit data and Basic PDF report."
+        },
+        {
+          "@type": "Offer",
+          name: "Pro",
+          price: "29",
+          priceCurrency: "EUR",
+          description: "10 scans per access code, never expires. Full audit data, copy-paste fixes, technical guides, Pro PDF report."
+        }
+      ],
+      featureList: [
+        "SEO analysis (titles, meta, headings, structured data, Core Web Vitals)",
+        "AEO — Answer Engine Optimization (structured data, citation likelihood, AI search readiness)",
+        "GEO — Generative Engine Optimization (ChatGPT, Perplexity, Google AI Overviews readiness)",
+        "Google Ads landing page experience analysis",
+        "Broken link checker",
+        "Image optimization audit",
+        "Internal linking analysis",
+        "Sitemap & robots.txt validator",
+        "Bilingual PDF reports (EN/HR) with tier-appropriate fix instructions"
+      ],
+      keywords: [
+        "SEO analyzer", "website audit", "AEO", "GEO", "Google Ads quality score",
+        "broken link checker", "image optimization", "internal linking", "sitemap validator",
+        "Core Web Vitals", "AI search optimization", "generative engine optimization"
+      ],
+      publisher: {
+        "@type": "Organization",
+        name: "FreeSiteAnalyzer",
+        url: SITE_ORIGIN
+      },
+      accessMode: ["textual", "visual"],
+      isAccessibleForFree: true,
+      sameAs: [
+        `${SITE_ORIGIN}/llms.txt`,
+        `${SITE_ORIGIN}/llms-full.txt`,
+        `${SITE_ORIGIN}/api/ai/knowledge.json`
+      ],
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${SITE_ORIGIN}/?url={url}`,
+        "query-input": "required name=url"
+      },
+      legalPages: {
+        privacy: `${SITE_ORIGIN}/privacy-policy`,
+        terms: `${SITE_ORIGIN}/terms-of-service`,
+        refund: `${SITE_ORIGIN}/refund-cancellation-policy`,
+        delivery: `${SITE_ORIGIN}/delivery-fulfillment`
+      },
+      sitemap: `${SITE_ORIGIN}/sitemap.xml`,
+      robots: `${SITE_ORIGIN}/robots.txt`
+    };
+    res
+      .set("Content-Type", "application/json")
+      .set("Access-Control-Allow-Origin", "*")
+      .set("Cache-Control", "public, max-age=3600")
+      .json(info);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
