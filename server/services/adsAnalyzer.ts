@@ -792,32 +792,22 @@ class AdsLandingPageAnalyzer {
       technicalFix = [
         "DETECTED SIGNALS: " + hosting.sharedHostingSignals.join(" | "),
         "",
-        "MIGRATION OPTIONS (ranked by ease):",
-        "",
-        "OPTION 1 — Managed WordPress hosting (if WordPress):",
-        "• Cloudways ($14/mo): Automated migration plugin, built-in CDN and caching",
-        "• SiteGround ($15/mo): Free migration, built-in SG Optimizer caching",
-        "• WP Engine ($30/mo): Automatic CDN, staging environments, managed updates",
-        "• All include server-level caching that eliminates cold-cache issues",
-        "",
-        "OPTION 2 — VPS with control panel:",
-        "• DigitalOcean ($6/mo) + RunCloud ($8/mo) or ServerPilot:",
-        "  1. Create a Droplet (Ubuntu, 1GB RAM minimum)",
-        "  2. Connect RunCloud for server management",
-        "  3. Deploy your site via Git or SFTP",
-        "  4. RunCloud auto-configures Nginx, PHP-FPM, and SSL",
-        "",
-        "OPTION 3 — Serverless/JAMstack (fastest for landing pages):",
-        "• Vercel: vercel deploy (zero-config for Next.js/React)",
-        "• Netlify: Connect Git repo, auto-builds and deploys to global CDN",
-        "• Cloudflare Pages: Similar to Netlify, runs on Cloudflare's edge network",
-        "• These serve your page from 200+ edge locations with sub-100ms TTFB",
-        "",
-        "AFTER MIGRATION — Add a CDN layer:",
-        "• Cloudflare free tier: Just update nameservers, instant global CDN",
+        "STEP 1 — Add a CDN layer (works on any host):",
+        "• Sign up at cloudflare.com (free tier is sufficient)",
+        "• Update your domain's nameservers to Cloudflare's",
         "• Enable 'Cache Everything' Page Rule for your landing page URL",
+        "• This serves your page from global edge locations, bypassing your origin server for cached requests",
         "",
-        "VERIFY: After migration, test TTFB from multiple locations:",
+        "STEP 2 — Enable server-side caching on your current host:",
+        "• WordPress: Install a caching plugin (W3 Total Cache or WP Super Cache) and enable page caching",
+        "• Enable OPcache in your PHP settings if available in your host control panel",
+        "• Enable Gzip/Brotli compression — most host control panels have a one-click option for this",
+        "",
+        "STEP 3 — Add Cache-Control headers for your landing page:",
+        '  Cache-Control: public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
+        "  (Tells CDNs to cache for 1 hour, serve stale while revalidating for 24h)",
+        "",
+        "VERIFY: Test TTFB from multiple locations after applying these steps:",
         "  Use https://tools.keycdn.com/performance to test from 14 global locations",
         "  Target: < 400ms from all locations"
       ].join("\n");
@@ -860,7 +850,7 @@ class AdsLandingPageAnalyzer {
           ? "Some hosting characteristics may cause slow responses under Ads traffic load"
           : "Hosting infrastructure appears adequate for Ads traffic",
       recommendation: hosting.isLikelyShared
-        ? "Migrate to a VPS, cloud hosting (AWS/GCP/Azure), or managed WordPress hosting. Add a CDN layer (Cloudflare free tier works) for edge caching"
+        ? "Add a CDN layer (Cloudflare free tier) and enable server-side caching on your current host to handle Ads traffic spikes without slowdowns"
         : hosting.coldCacheRisk
           ? "Add server-side caching (Redis/Varnish) or CDN edge caching to handle Ads traffic spikes"
           : "No action needed",
@@ -1294,16 +1284,16 @@ class AdsLandingPageAnalyzer {
 
     if (hosting.isLikelyShared) {
       recs.push({
-        title: "Upgrade Hosting Infrastructure",
-        description: "Shared hosting patterns detected. Your server can't reliably handle Ads traffic spikes, causing inconsistent page load times.",
+        title: "Improve Hosting Performance",
+        description: "Shared hosting patterns detected. Your server may struggle under Ads traffic spikes, causing inconsistent page load times that hurt Quality Score.",
         priority: "Critical",
         fixType: "infrastructure",
-        impact: "Upgrading from shared hosting to VPS/cloud + CDN typically improves TTFB by 60-80% and eliminates cold-cache timeout issues",
+        impact: "Adding a CDN layer + server-side caching typically improves TTFB by 60-80% and eliminates cold-cache delays during campaign bursts",
         actionItems: [
-          "Migrate to VPS or cloud hosting (DigitalOcean, AWS Lightsail, or Google Cloud Run)",
-          "Add Cloudflare (free tier) for DNS and edge caching",
-          "Enable server-level caching (OPcache for PHP, Redis for dynamic content)",
-          "Set up monitoring to catch slow responses before they impact Quality Score",
+          "Add Cloudflare (free tier) as a CDN — update nameservers and enable 'Cache Everything' for your landing page",
+          "Enable a caching plugin on your current host (e.g. W3 Total Cache for WordPress)",
+          "Enable OPcache and Gzip/Brotli compression via your host's control panel",
+          "Test TTFB from multiple locations using tools.keycdn.com/performance — target under 400ms",
         ],
       });
     }
