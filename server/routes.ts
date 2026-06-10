@@ -1035,6 +1035,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/robots.txt", (_req, res) => {
     const body =
       `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /checkout\nDisallow: /verify-email\n\n` +
+      `Content-Signal: search=yes, ai-input=yes, ai-train=yes\n\n` +
+      `# Curated AI / LLM information\n# ${SITE_ORIGIN}/llm-info.json\n# Root index for LLMs (llmstxt.org):\n
+        # ${SITE_ORIGIN}/llms.txt\n# Structured Knowledge\n# ${SITE_ORIGIN}/api/ai/knowledge.json\n\n` +
       `# AI crawlers welcome\nUser-agent: GPTBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\n\n` +
       `Sitemap: ${SITE_ORIGIN}/sitemap.xml\n`;
     res.type("text/plain").set("Cache-Control", "public, max-age=3600").send(body);
