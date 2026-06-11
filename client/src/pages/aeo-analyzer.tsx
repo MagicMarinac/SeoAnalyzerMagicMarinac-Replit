@@ -58,7 +58,7 @@ import type {
 } from "@shared/schema";
 
 const formSchema = z.object({
-  url: z.string().url(),
+  url: z.string().url("Please enter a valid URL"),
 });
 
 type ActiveTab = "analyze" | "compare";
@@ -81,12 +81,12 @@ export default function AeoAnalyzerPage() {
       return response.json();
     },
     onSuccess: (result: AeoAnalysis) => {
-      toast({ title: t("aeo.toast.analysisCompleteTitle"), description: t("aeo.toast.analysisCompleteDescription", { url: result.url }) });
+      toast({ title: "Analysis Complete", description: `AEO analysis for ${result.url}` });
       setAnalysis(result);
     },
     onError: (error: any) => {
       if (isFetchErrorCode(error?.code)) return;
-      toast({ title: t("aeo.toast.failedTitle"), description: error.message || t("aeo.toast.failedDescription"), variant: "destructive" });
+      toast({ title: "Analysis Failed", description: error.message || "Failed to analyze page", variant: "destructive" });
     },
   });
 
@@ -104,17 +104,17 @@ export default function AeoAnalyzerPage() {
             </div>
             <div className="flex flex-col leading-tight">
               <h1 className="text-xl font-bold text-foreground">FreeSiteAnalyzer</h1>
-              <span className="text-[11px] font-medium tracking-wide text-muted-foreground">{t("header.slogan")}</span>
+              <span className="text-[11px] font-medium tracking-wide text-muted-foreground">Scan. Snap. Fix What Matters.</span>
             </div>
           </div>
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/master-analyzer" className="text-muted-foreground hover:text-foreground transition-colors">{t("standalone.nav.masterAnalyzer")}</Link>
+            <Link href="/master-analyzer" className="text-muted-foreground hover:text-foreground transition-colors">Master Analyzer</Link>
             <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">FreeSiteAnalyzer</Link>
-            <Link href="/ads-analyzer" className="text-muted-foreground hover:text-foreground transition-colors">{t("standalone.nav.adLandingPage")}</Link>
-            <Link href="/aeo-analyzer" className="text-foreground font-medium transition-colors">{t("standalone.nav.aeoSeo")}</Link>
-            <Link href="/site-tools" className="text-muted-foreground hover:text-foreground transition-colors">{t("standalone.nav.siteTools")}</Link>
+            <Link href="/ads-analyzer" className="text-muted-foreground hover:text-foreground transition-colors">Ads Landing Page</Link>
+            <Link href="/aeo-analyzer" className="text-foreground font-medium transition-colors">AEO / AI SEO</Link>
+            <Link href="/site-tools" className="text-muted-foreground hover:text-foreground transition-colors">Site Tools</Link>
             <button className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-              <User className="w-4 h-4 mr-2 inline" />{t("standalone.nav.account")}
+              <User className="w-4 h-4 mr-2 inline" />Account
             </button>
           </nav>
         </div>
@@ -127,7 +127,7 @@ export default function AeoAnalyzerPage() {
             onClick={() => setActiveTab("analyze")}
             className="flex items-center gap-2"
           >
-            <Brain className="w-4 h-4" />{t("aeo.analyze.tab")}
+            <Brain className="w-4 h-4" />Analyze
           </Button>
           <Button
             variant={activeTab === "compare" ? "default" : "outline"}
@@ -135,7 +135,7 @@ export default function AeoAnalyzerPage() {
             className="flex items-center gap-2"
             data-testid="compare-tab"
           >
-            <BarChart3 className="w-4 h-4" />{t("aeo.analyze.compareTab")}
+            <BarChart3 className="w-4 h-4" />Compare Competitors
           </Button>
         </div>
 
@@ -146,11 +146,11 @@ export default function AeoAnalyzerPage() {
                 <div className="max-w-2xl mx-auto text-center">
                   <div className="inline-flex items-center gap-2 bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-full text-sm font-medium mb-4">
                     <Brain className="w-4 h-4" />
-                    {t("aeo.analyze.badge")}
+                    AI Search Ready
                   </div>
-                  <h2 className="text-3xl font-bold text-foreground mb-4">{t("aeo.analyze.title")}</h2>
+                  <h2 className="text-3xl font-bold text-foreground mb-4">AEO / AI SEO Analyzer</h2>
                   <p className="text-muted-foreground mb-8">
-                    {t("aeo.analyze.description")}
+                    Evaluate how well your content is optimized for AI answer engines like ChatGPT, Perplexity, and Google AI Overviews. Measures structured data, content format, authority signals, and AI accessibility.
                   </p>
 
                   <Form {...form}>
@@ -182,9 +182,9 @@ export default function AeoAnalyzerPage() {
                           data-testid="aeo-button-analyze"
                         >
                           {analyzeMutation.isPending ? (
-                            <><Loader2 className="w-4 h-4 mr-2 animate-spin" />{t("standalone.form.analyzing")}</>
+                            <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Analyzing...</>
                           ) : (
-                            <><Brain className="w-4 h-4 mr-2" />{t("aeo.analyze.tab")}</>
+                            <><Brain className="w-4 h-4 mr-2" />Analyze</>
                           )}
                         </Button>
                       </div>
@@ -206,10 +206,10 @@ export default function AeoAnalyzerPage() {
                   )}
 
                   <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
-                    <span className="flex items-center"><Database className="w-4 h-4 text-purple-500 mr-2" />{t("aeo.analyze.featureStructuredData")}</span>
-                    <span className="flex items-center"><FileText className="w-4 h-4 text-blue-500 mr-2" />{t("aeo.analyze.featureContentFormat")}</span>
-                    <span className="flex items-center"><Shield className="w-4 h-4 text-amber-500 mr-2" />{t("aeo.analyze.featureEEAT")}</span>
-                    <span className="flex items-center"><Globe className="w-4 h-4 text-indigo-500 mr-2" />{t("aeo.analyze.featureAiAccess")}</span>
+                    <span className="flex items-center"><Database className="w-4 h-4 text-purple-500 mr-2" />Structured Data</span>
+                    <span className="flex items-center"><FileText className="w-4 h-4 text-blue-500 mr-2" />Content Format</span>
+                    <span className="flex items-center"><Shield className="w-4 h-4 text-amber-500 mr-2" />E-E-A-T Signals</span>
+                    <span className="flex items-center"><Globe className="w-4 h-4 text-indigo-500 mr-2" />AI Accessibility</span>
                   </div>
                 </div>
               </CardContent>
@@ -228,12 +228,12 @@ export default function AeoAnalyzerPage() {
                 <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
                   <Search className="text-primary-foreground w-3 h-3" />
                 </div>
-                <span className="text-muted-foreground">{t("standalone.footer.copyright")}</span>
+                <span className="text-muted-foreground">© 2024 FreeSiteAnalyzer. All rights reserved.</span>
               </div>
               <div className="flex items-center space-x-6 text-sm">
-                <a href="#" className="text-muted-foreground hover:text-foreground">{t("standalone.footer.privacy")}</a>
-                <a href="#" className="text-muted-foreground hover:text-foreground">{t("standalone.footer.terms")}</a>
-                <a href="#" className="text-muted-foreground hover:text-foreground">{t("standalone.footer.support")}</a>
+                <a href="#" className="text-muted-foreground hover:text-foreground">Privacy Policy</a>
+                <a href="#" className="text-muted-foreground hover:text-foreground">Terms of Service</a>
+                <a href="#" className="text-muted-foreground hover:text-foreground">Support</a>
               </div>
             </div>
           </div>
@@ -268,8 +268,6 @@ function AeoResults({ analysis }: { analysis: AeoAnalysis }) {
 }
 
 function CitationLikelihoodCard({ citation }: { citation: CitationLikelihood }) {
-  const { t } = useTranslation();
-
   const ratingColors: Record<string, string> = {
     "Very Likely": "text-green-600",
     "Likely": "text-blue-600",
@@ -282,27 +280,21 @@ function CitationLikelihoodCard({ citation }: { citation: CitationLikelihood }) 
     "Possible": "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200",
     "Unlikely": "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200",
   };
-  const ratingLabels: Record<string, string> = {
-    "Very Likely": t("aeo.citation.veryLikely"),
-    "Likely": t("aeo.citation.likely"),
-    "Possible": t("aeo.citation.possible"),
-    "Unlikely": t("aeo.citation.unlikely"),
-  };
 
   return (
     <Card className="rounded-xl border border-border shadow-sm p-6" data-testid="citation-likelihood">
       <CardContent className="p-0">
         <div className="flex items-center gap-2 mb-4">
           <Target className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-bold text-foreground">{t("aeo.citation.title")}</h3>
+          <h3 className="text-lg font-bold text-foreground">Citation Likelihood</h3>
         </div>
         <div className="flex items-center gap-4 mb-4">
           <div className={`text-4xl font-bold ${ratingColors[citation.rating] || "text-gray-600"}`}>{citation.score}</div>
           <div>
             <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${ratingBg[citation.rating] || ""}`}>
-              <Zap className="w-3 h-3" />{ratingLabels[citation.rating] || citation.rating}
+              <Zap className="w-3 h-3" />{citation.rating}
             </span>
-            <p className="text-xs text-muted-foreground mt-1">{t("aeo.citation.outOf")}</p>
+            <p className="text-xs text-muted-foreground mt-1">out of 100</p>
           </div>
         </div>
         <div className="space-y-2">
@@ -327,7 +319,6 @@ function CitationLikelihoodCard({ citation }: { citation: CitationLikelihood }) 
 }
 
 function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
-  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const qualityColors: Record<string, string> = {
     High: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
@@ -335,11 +326,11 @@ function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
     Low: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
   };
   const typeLabels: Record<string, string> = {
-    answer: t("aeo.aiPreview.typeAnswer"),
-    faq: t("aeo.aiPreview.typeFaq"),
-    definition: t("aeo.aiPreview.typeDefinition"),
-    statistic: t("aeo.aiPreview.typeStatistic"),
-    list: t("aeo.aiPreview.typeList"),
+    answer: "Direct Answer",
+    faq: "FAQ",
+    definition: "Definition",
+    statistic: "Statistic",
+    list: "List",
   };
   const typeColors: Record<string, string> = {
     answer: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
@@ -355,10 +346,10 @@ function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Eye className="w-5 h-5 text-primary" />
-            <h3 className="text-xl font-bold text-foreground">{t("aeo.aiPreview.title")}</h3>
+            <h3 className="text-xl font-bold text-foreground">AI Search Preview</h3>
           </div>
           <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${qualityColors[preview.extractionQuality]}`}>
-            {preview.extractionQuality} {t("aeo.aiPreview.extractionSuffix")}
+            {preview.extractionQuality} Extraction Quality
           </span>
         </div>
         <p className="text-sm text-muted-foreground mb-4">{preview.extractionDetails}</p>
@@ -366,7 +357,7 @@ function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
         <div className="bg-muted/50 rounded-lg border border-border p-4 mb-4">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-4 h-4 text-blue-500" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("aeo.aiPreview.simulatedCitation")}</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Simulated AI Citation</span>
           </div>
           <p className="text-sm font-medium text-foreground mb-1">{preview.simulatedCitation.title}</p>
           <p className="text-sm text-muted-foreground">{preview.simulatedCitation.snippet}</p>
@@ -380,7 +371,7 @@ function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
               className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors mb-3"
               data-testid="preview-excerpts-toggle"
             >
-              <span>{t("aeo.aiPreview.quotableExcerpts", { count: preview.quotableExcerpts.length })}</span>
+              <span>Quotable Excerpts ({preview.quotableExcerpts.length})</span>
               {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
             {expanded && (
@@ -391,7 +382,7 @@ function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
                       <span className={`px-2 py-0.5 rounded text-xs font-medium ${typeColors[excerpt.type] || "bg-gray-100 text-gray-700"}`}>
                         {typeLabels[excerpt.type] || excerpt.type}
                       </span>
-                      <span className="text-xs text-muted-foreground">{t("aeo.aiPreview.from")} {excerpt.source}</span>
+                      <span className="text-xs text-muted-foreground">from: {excerpt.source}</span>
                     </div>
                     <p className="text-sm text-foreground whitespace-pre-line">{excerpt.text}</p>
                   </div>
@@ -406,7 +397,6 @@ function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
 }
 
 function SchemaGeneratorCard({ suggestions }: { suggestions: SchemaSuggestion[] }) {
-  const { t } = useTranslation();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
@@ -420,33 +410,20 @@ function SchemaGeneratorCard({ suggestions }: { suggestions: SchemaSuggestion[] 
   const needsAction = suggestions.filter(s => !s.alreadyPresent);
   const present = suggestions.filter(s => s.alreadyPresent);
 
-  const priorityColors: Record<string, string> = {
-    Critical: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-    High: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-    Medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-    Low: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-  };
-  const priorityLabels: Record<string, string> = {
-    Critical: t("standalone.priority.critical"),
-    High: t("standalone.priority.high"),
-    Medium: t("standalone.priority.medium"),
-    Low: t("standalone.priority.low"),
-  };
-
   return (
     <Card className="rounded-xl border border-border shadow-sm" data-testid="schema-generator">
       <CardContent className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <Code className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-bold text-foreground">{t("aeo.schema.title")}</h3>
+          <h3 className="text-lg font-bold text-foreground">Schema Markup Generator</h3>
         </div>
         <p className="text-sm text-muted-foreground mb-4">
-          {t("aeo.schema.description")}
+          Ready-to-copy JSON-LD code generated from your page content. Paste into your HTML &lt;head&gt;.
         </p>
 
         {present.length > 0 && (
           <div className="mb-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">{t("aeo.schema.alreadyPresent")}</p>
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Already Present</p>
             <div className="flex flex-wrap gap-2">
               {present.map((s, i) => (
                 <span key={i} className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
@@ -460,14 +437,18 @@ function SchemaGeneratorCard({ suggestions }: { suggestions: SchemaSuggestion[] 
         <div className="space-y-3">
           {needsAction.map((suggestion, i) => {
             const isExpanded = expandedIndex === i;
+            const priorityColors: Record<string, string> = {
+              Critical: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+              High: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+              Medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+              Low: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+            };
             return (
               <div key={i} className="border border-border rounded-lg p-3">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-sm text-foreground">{suggestion.label}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${priorityColors[suggestion.priority]}`}>
-                      {priorityLabels[suggestion.priority] || suggestion.priority}
-                    </span>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${priorityColors[suggestion.priority]}`}>{suggestion.priority}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <button
@@ -502,30 +483,22 @@ function SchemaGeneratorCard({ suggestions }: { suggestions: SchemaSuggestion[] 
 }
 
 function ContentGapFinderCard({ gaps }: { gaps: ContentGapsAnalysis }) {
-  const { t } = useTranslation();
-
-  const statusLabels: Record<string, string> = {
-    pass: t("standalone.checks.statusPass"),
-    fail: t("standalone.checks.statusFail"),
-    warning: t("standalone.checks.statusWarning"),
-  };
-
   return (
     <Card className="rounded-xl border border-border shadow-sm" data-testid="content-gaps">
       <CardContent className="p-6">
         <div className="flex items-center gap-2 mb-2">
           <Brain className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-bold text-foreground">{t("aeo.contentGaps.title")}</h3>
+          <h3 className="text-lg font-bold text-foreground">Content Gap Finder</h3>
         </div>
 
         <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
-          {t("aeo.contentGaps.description")}
+          Checks whether your page content is structured for AI retrieval. It compares your title, H1, meta description, and body copy to detect misaligned headlines, implicit-only capabilities, missing concrete facts, and lack of machine-readable markup — the most common reasons AI engines skip or misclassify a page.
         </p>
 
         <div className="flex items-center gap-3 mb-4">
           <div className="flex-1">
             <div className="flex items-center justify-between text-sm mb-1">
-              <span className="text-muted-foreground">{t("aeo.contentGaps.semanticAlignment")}</span>
+              <span className="text-muted-foreground">Semantic Alignment</span>
               <span className="font-semibold text-foreground">{gaps.coverageScore}%</span>
             </div>
             <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -539,9 +512,10 @@ function ContentGapFinderCard({ gaps }: { gaps: ContentGapsAnalysis }) {
 
         <p className="text-sm text-muted-foreground mb-3">{gaps.coverageDetails}</p>
 
+
         {gaps.findings.length > 0 && (
           <div>
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">{t("aeo.contentGaps.coverageChecks")}</p>
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Semantic Coverage Checks</p>
             <div className="space-y-2">
               {gaps.findings.map((finding, i) => {
                 const Icon = finding.status === "pass" ? CheckCircle2 : finding.status === "fail" ? XCircle : AlertTriangle;
@@ -551,6 +525,7 @@ function ContentGapFinderCard({ gaps }: { gaps: ContentGapsAnalysis }) {
                   : finding.status === "fail"
                   ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
                   : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300";
+                const pillLabel = finding.status === "pass" ? "Pass" : finding.status === "fail" ? "Fail" : "Warning";
                 return (
                   <div key={i} className="rounded-lg border border-border overflow-hidden">
                     <div className="flex items-start gap-2 p-2">
@@ -560,7 +535,7 @@ function ContentGapFinderCard({ gaps }: { gaps: ContentGapsAnalysis }) {
                         <p className="text-xs text-muted-foreground">{finding.detail}</p>
                       </div>
                       <span className={`px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0 ${pillClass}`}>
-                        {statusLabels[finding.status] || finding.status}
+                        {pillLabel}
                       </span>
                     </div>
                     {finding.fix && (
@@ -582,7 +557,7 @@ function ContentGapFinderCard({ gaps }: { gaps: ContentGapsAnalysis }) {
         {gaps.findings.length === 0 && (
           <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg border border-border">
             <CheckCircle2 className="w-5 h-5 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">{t("aeo.contentGaps.noGaps")}</span>
+            <span className="text-sm text-muted-foreground">No significant semantic gaps detected. Content positioning appears coherent.</span>
           </div>
         )}
       </CardContent>
@@ -591,7 +566,6 @@ function ContentGapFinderCard({ gaps }: { gaps: ContentGapsAnalysis }) {
 }
 
 function CompetitorComparison() {
-  const { t } = useTranslation();
   const [urls, setUrls] = useState<string[]>(["", ""]);
   const [comparison, setComparison] = useState<AeoComparisonResult | null>(null);
   const { toast } = useToast();
@@ -602,11 +576,11 @@ function CompetitorComparison() {
       return response.json();
     },
     onSuccess: (result: AeoComparisonResult) => {
-      toast({ title: t("aeo.toast.comparisonCompleteTitle"), description: t("aeo.toast.comparisonCompleteDescription", { count: result.urls.length }) });
+      toast({ title: "Comparison Complete", description: `Compared ${result.urls.length} websites` });
       setComparison(result);
     },
     onError: (error: any) => {
-      toast({ title: t("aeo.toast.comparisonFailedTitle"), description: error.message || t("aeo.toast.comparisonFailedDescription"), variant: "destructive" });
+      toast({ title: "Comparison Failed", description: error.message || "Failed to compare", variant: "destructive" });
     },
   });
 
@@ -627,27 +601,20 @@ function CompetitorComparison() {
   const handleCompare = () => {
     const validUrls = urls.filter(u => u.trim().length > 0);
     if (validUrls.length < 2) {
-      toast({ title: t("aeo.toast.needTwoUrlsTitle"), description: t("aeo.toast.needTwoUrlsDescription"), variant: "destructive" });
+      toast({ title: "Need at least 2 URLs", description: "Enter at least 2 URLs to compare", variant: "destructive" });
       return;
     }
     compareMutation.mutate({ urls: validUrls });
   };
 
   const categories = [
-    { key: "structuredDataScore", label: t("aeo.compare.catStructuredData"), icon: Database },
-    { key: "contentFormatScore", label: t("aeo.compare.catContentFormat"), icon: FileText },
-    { key: "authorityScore", label: t("aeo.compare.catAuthority"), icon: Shield },
-    { key: "semanticScore", label: t("aeo.compare.catSemantic"), icon: Code },
-    { key: "aiAccessibilityScore", label: t("aeo.compare.catAiAccess"), icon: Globe },
-    { key: "citationScore", label: t("aeo.compare.catCitation"), icon: Target },
+    { key: "structuredDataScore", label: "Structured Data", icon: Database },
+    { key: "contentFormatScore", label: "Content Format", icon: FileText },
+    { key: "authorityScore", label: "Authority", icon: Shield },
+    { key: "semanticScore", label: "Semantic", icon: Code },
+    { key: "aiAccessibilityScore", label: "AI Access", icon: Globe },
+    { key: "citationScore", label: "Citation", icon: Target },
   ];
-
-  const ratingLabels: Record<string, string> = {
-    "Highly Optimized": t("aeo.rating.highlyOptimized"),
-    "AI-Ready": t("aeo.rating.aiReady"),
-    "Partially Ready": t("aeo.rating.partiallyReady"),
-    "Not Ready": t("aeo.rating.notReady"),
-  };
 
   const barColors = ["bg-blue-500", "bg-purple-500", "bg-amber-500"];
 
@@ -658,11 +625,11 @@ function CompetitorComparison() {
           <div className="max-w-2xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium mb-4">
               <BarChart3 className="w-4 h-4" />
-              {t("aeo.compare.badge")}
+              Side-by-Side
             </div>
-            <h2 className="text-3xl font-bold text-foreground mb-4">{t("aeo.compare.title")}</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">Competitor AEO Comparison</h2>
             <p className="text-muted-foreground mb-8">
-              {t("aeo.compare.description")}
+              Compare 2-3 websites side by side to see who's better optimized for AI search engines.
             </p>
 
             <div className="space-y-3 max-w-lg mx-auto">
@@ -687,7 +654,7 @@ function CompetitorComparison() {
               <div className="flex items-center justify-between">
                 {urls.length < 3 && (
                   <Button variant="outline" size="sm" onClick={addUrl} className="flex items-center gap-1">
-                    <Plus className="w-4 h-4" />{t("aeo.compare.addUrl")}
+                    <Plus className="w-4 h-4" />Add URL
                   </Button>
                 )}
                 <Button
@@ -697,9 +664,9 @@ function CompetitorComparison() {
                   data-testid="compare-button"
                 >
                   {compareMutation.isPending ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />{t("aeo.compare.comparing")}</>
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Comparing...</>
                   ) : (
-                    <><BarChart3 className="w-4 h-4 mr-2" />{t("aeo.compare.compare")}</>
+                    <><BarChart3 className="w-4 h-4 mr-2" />Compare</>
                   )}
                 </Button>
               </div>
@@ -714,7 +681,7 @@ function CompetitorComparison() {
             <CardContent className="p-0">
               <div className="flex items-center gap-2 mb-3">
                 <Trophy className="w-5 h-5 text-yellow-500" />
-                <h3 className="text-lg font-bold text-foreground">{t("aeo.compare.summaryTitle")}</h3>
+                <h3 className="text-lg font-bold text-foreground">Comparison Summary</h3>
               </div>
               <p className="text-muted-foreground">{comparison.summary}</p>
             </CardContent>
@@ -723,7 +690,6 @@ function CompetitorComparison() {
           <div className={`grid gap-4 ${comparison.analyses.length === 3 ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-2"}`}>
             {comparison.analyses.map((a, i) => {
               const isWinner = a.url === comparison.winner;
-              const ratingColorClass = a.rating === "Highly Optimized" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : a.rating === "AI-Ready" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" : a.rating === "Partially Ready" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
               return (
                 <Card key={i} className={`rounded-xl border shadow-sm p-5 ${isWinner ? "border-2 border-yellow-400 dark:border-yellow-600" : "border-border"}`} data-testid={`compare-result-${i}`}>
                   <CardContent className="p-0">
@@ -739,8 +705,8 @@ function CompetitorComparison() {
                         {a.score}
                       </div>
                     </div>
-                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium mb-4 ${ratingColorClass}`}>
-                      {ratingLabels[a.rating] || a.rating}
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium mb-4 ${a.rating === "Highly Optimized" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : a.rating === "AI-Ready" ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" : a.rating === "Partially Ready" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"}`}>
+                      {a.rating}
                     </span>
 
                     <div className="space-y-2 mt-3">
@@ -760,7 +726,7 @@ function CompetitorComparison() {
 
                     {a.keyStrengths.length > 0 && (
                       <div className="mt-4">
-                        <p className="text-xs font-medium text-green-600 mb-1">{t("aeo.compare.strengths")}</p>
+                        <p className="text-xs font-medium text-green-600 mb-1">Strengths</p>
                         {a.keyStrengths.slice(0, 3).map((s, j) => (
                           <p key={j} className="text-xs text-muted-foreground flex items-start gap-1">
                             <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />{s}
@@ -770,7 +736,7 @@ function CompetitorComparison() {
                     )}
                     {a.keyWeaknesses.length > 0 && (
                       <div className="mt-2">
-                        <p className="text-xs font-medium text-red-600 mb-1">{t("aeo.compare.weaknesses")}</p>
+                        <p className="text-xs font-medium text-red-600 mb-1">Weaknesses</p>
                         {a.keyWeaknesses.slice(0, 3).map((w, j) => (
                           <p key={j} className="text-xs text-muted-foreground flex items-start gap-1">
                             <XCircle className="w-3 h-3 text-red-500 mt-0.5 flex-shrink-0" />{w}
@@ -786,7 +752,7 @@ function CompetitorComparison() {
 
           <Card className="rounded-xl border border-border shadow-sm p-6">
             <CardContent className="p-0">
-              <h3 className="text-lg font-bold text-foreground mb-4">{t("aeo.compare.categoryComparison")}</h3>
+              <h3 className="text-lg font-bold text-foreground mb-4">Category Comparison</h3>
               <div className="space-y-4">
                 {categories.map((cat) => {
                   const Icon = cat.icon;
@@ -825,20 +791,11 @@ function CompetitorComparison() {
 }
 
 function RatingCard({ rating, score, url }: { rating: string; score: number; url: string }) {
-  const { t } = useTranslation();
-
   const ratingConfig: Record<string, { color: string; bg: string; border: string; badgeClass: string }> = {
     "Highly Optimized": { color: "text-green-600", bg: "bg-green-50 dark:bg-green-950", border: "border-green-200 dark:border-green-800", badgeClass: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" },
     "AI-Ready": { color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-950", border: "border-blue-200 dark:border-blue-800", badgeClass: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" },
     "Partially Ready": { color: "text-yellow-600", bg: "bg-yellow-50 dark:bg-yellow-950", border: "border-yellow-200 dark:border-yellow-800", badgeClass: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" },
     "Not Ready": { color: "text-red-600", bg: "bg-red-50 dark:bg-red-950", border: "border-red-200 dark:border-red-800", badgeClass: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" },
-  };
-
-  const ratingLabels: Record<string, string> = {
-    "Highly Optimized": t("aeo.rating.highlyOptimized"),
-    "AI-Ready": t("aeo.rating.aiReady"),
-    "Partially Ready": t("aeo.rating.partiallyReady"),
-    "Not Ready": t("aeo.rating.notReady"),
   };
 
   const config = ratingConfig[rating] || ratingConfig["Partially Ready"];
@@ -850,10 +807,10 @@ function RatingCard({ rating, score, url }: { rating: string; score: number; url
           <ProgressRing value={score} size={80} strokeWidth={8} />
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h3 className="text-2xl font-bold text-foreground">{t("aeo.rating.title")}</h3>
+              <h3 className="text-2xl font-bold text-foreground">AEO Readiness Score</h3>
               <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${config.badgeClass}`}>
                 <Sparkles className="w-4 h-4" />
-                {ratingLabels[rating] || rating}
+                {rating}
               </span>
             </div>
             <p className="text-muted-foreground text-sm mt-1">{url}</p>
@@ -865,62 +822,60 @@ function RatingCard({ rating, score, url }: { rating: string; score: number; url
 }
 
 function CategoryOverview({ results }: { results: AeoAnalysisResults }) {
-  const { t } = useTranslation();
-
   const categories = [
     {
-      name: t("aeo.categories.structuredData"),
+      name: "Structured Data",
       icon: Database,
       color: "purple",
       score: results.structuredDataScore,
       metrics: [
-        { label: t("aeo.categories.metricJsonLd"), value: results.structuredData.jsonLdPresent },
-        { label: t("aeo.categories.metricFaqSchema"), value: results.structuredData.faqSchema },
-        { label: t("aeo.categories.metricOrgSchema"), value: results.structuredData.organizationSchema },
+        { label: "JSON-LD", value: results.structuredData.jsonLdPresent },
+        { label: "FAQ Schema", value: results.structuredData.faqSchema },
+        { label: "Organization Schema", value: results.structuredData.organizationSchema },
       ],
     },
     {
-      name: t("aeo.categories.contentFormat"),
+      name: "Content Format",
       icon: FileText,
       color: "blue",
       score: results.contentFormatScore,
       metrics: [
-        { label: t("aeo.categories.metricQuestionHeadings"), value: results.contentFormat.hasQuestionHeadings },
-        { label: t("aeo.categories.metricDirectAnswers"), value: results.contentFormat.directAnswerParagraphs > 0 },
-        { label: t("aeo.categories.metricListsTables"), value: results.contentFormat.hasLists || results.contentFormat.hasTables },
+        { label: "Question Headings", value: results.contentFormat.hasQuestionHeadings },
+        { label: "Direct Answers", value: results.contentFormat.directAnswerParagraphs > 0 },
+        { label: "Lists/Tables", value: results.contentFormat.hasLists || results.contentFormat.hasTables },
       ],
     },
     {
-      name: t("aeo.categories.authority"),
+      name: "Authority & E-E-A-T",
       icon: Shield,
       color: "amber",
       score: results.authorityScore,
       metrics: [
-        { label: t("aeo.categories.metricAuthorInfo"), value: results.authority.hasAuthorInfo },
-        { label: t("aeo.categories.metricCitations"), value: results.authority.hasCitations },
-        { label: t("aeo.categories.metricDatePublished"), value: results.authority.hasDatePublished },
+        { label: "Author Info", value: results.authority.hasAuthorInfo },
+        { label: "Citations", value: results.authority.hasCitations },
+        { label: "Date Published", value: results.authority.hasDatePublished },
       ],
     },
     {
-      name: t("aeo.categories.semantic"),
+      name: "Semantic Structure",
       icon: Code,
       color: "green",
       score: results.semanticScore,
       metrics: [
-        { label: t("aeo.categories.metricHeadingHierarchy"), value: results.semantic.headingHierarchyValid },
-        { label: t("aeo.categories.metricSemanticHtml"), value: results.semantic.usesSemanticHtml },
-        { label: t("aeo.categories.metricTableOfContents"), value: results.semantic.hasTableOfContents },
+        { label: "Heading Hierarchy", value: results.semantic.headingHierarchyValid },
+        { label: "Semantic HTML", value: results.semantic.usesSemanticHtml },
+        { label: "Table of Contents", value: results.semantic.hasTableOfContents },
       ],
     },
     {
-      name: t("aeo.categories.aiAccessibility"),
+      name: "AI Accessibility",
       icon: Globe,
       color: "indigo",
       score: results.aiAccessibilityScore,
       metrics: [
-        { label: t("aeo.categories.metricAiCrawlers"), value: results.aiAccessibility.robotsTxtAllowsAi },
-        { label: t("aeo.categories.metricMetaDescription"), value: results.aiAccessibility.hasMetaDescription },
-        { label: t("aeo.categories.metricCanonicalUrl"), value: results.aiAccessibility.hasCanonicalUrl },
+        { label: "AI Crawlers", value: results.aiAccessibility.robotsTxtAllowsAi },
+        { label: "Meta Description", value: results.aiAccessibility.hasMetaDescription },
+        { label: "Canonical URL", value: results.aiAccessibility.hasCanonicalUrl },
       ],
     },
   ];
@@ -966,14 +921,12 @@ function CategoryOverview({ results }: { results: AeoAnalysisResults }) {
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const { t } = useTranslation();
-  if (status === "PASS") return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"><CheckCircle2 className="w-3 h-3" />{t("standalone.checks.statusPass")}</span>;
-  if (status === "FAIL") return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"><XCircle className="w-3 h-3" />{t("standalone.checks.statusFail")}</span>;
-  return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"><AlertTriangle className="w-3 h-3" />{t("standalone.checks.statusWarning")}</span>;
+  if (status === "PASS") return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"><CheckCircle2 className="w-3 h-3" />Pass</span>;
+  if (status === "FAIL") return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"><XCircle className="w-3 h-3" />Fail</span>;
+  return <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"><AlertTriangle className="w-3 h-3" />Warning</span>;
 }
 
 function TechnicalFixBlock({ technicalFix }: { technicalFix: string }) {
-  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -984,14 +937,14 @@ function TechnicalFixBlock({ technicalFix }: { technicalFix: string }) {
         data-testid="technical-fix-toggle"
       >
         <Wrench className="w-4 h-4" />
-        <span>{t("aeo.technicalFix.toggle")}</span>
+        <span>Technical Fix Guide</span>
         {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
       </button>
       {expanded && (
         <div className="mt-3 rounded-lg border border-border bg-muted/50 p-4 animate-in slide-in-from-top-2 duration-200" data-testid="technical-fix-content">
           <div className="flex items-center gap-2 mb-3">
             <Code className="w-4 h-4 text-muted-foreground" />
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("aeo.technicalFix.steps")}</span>
+            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Step-by-step instructions</span>
           </div>
           <pre className="text-sm text-foreground whitespace-pre-wrap font-mono leading-relaxed overflow-x-auto">{technicalFix}</pre>
         </div>
@@ -1001,8 +954,6 @@ function TechnicalFixBlock({ technicalFix }: { technicalFix: string }) {
 }
 
 function ChecksDetail({ checks }: { checks: AeoCheck[] }) {
-  const { t } = useTranslation();
-
   const groupedChecks: Record<string, AeoCheck[]> = {};
   for (const check of checks) {
     const cat = check.category;
@@ -1011,18 +962,18 @@ function ChecksDetail({ checks }: { checks: AeoCheck[] }) {
   }
 
   const categoryLabels: Record<string, { label: string; icon: typeof Database }> = {
-    "structured-data": { label: t("aeo.checks.catStructuredData"), icon: Database },
-    "content-format": { label: t("aeo.checks.catContentFormat"), icon: FileText },
-    "authority": { label: t("aeo.checks.catAuthority"), icon: Shield },
-    "technical": { label: t("aeo.checks.catSemantic"), icon: Code },
-    "discoverability": { label: t("aeo.checks.catAiAccess"), icon: Globe },
+    "structured-data": { label: "Structured Data", icon: Database },
+    "content-format": { label: "Content Format", icon: FileText },
+    "authority": { label: "Authority & E-E-A-T", icon: Shield },
+    "technical": { label: "Semantic Structure", icon: Code },
+    "discoverability": { label: "AI Accessibility", icon: Globe },
   };
 
   return (
     <Card className="rounded-xl border border-border shadow-sm">
       <CardContent className="p-6">
-        <h3 className="text-xl font-bold text-foreground mb-2">{t("aeo.checks.title")}</h3>
-        <p className="text-sm text-muted-foreground mb-6">{t("aeo.checks.description")}</p>
+        <h3 className="text-xl font-bold text-foreground mb-2">Detailed Check Results</h3>
+        <p className="text-sm text-muted-foreground mb-6">Click "Technical Fix Guide" on any failing check for step-by-step instructions with code examples</p>
         <div className="space-y-8">
           {Object.entries(groupedChecks).map(([category, catChecks]) => {
             const catInfo = categoryLabels[category] || { label: category, icon: Shield };
@@ -1045,9 +996,9 @@ function ChecksDetail({ checks }: { checks: AeoCheck[] }) {
                       </div>
                       <p className="text-sm text-muted-foreground ml-7 mb-2">{check.details}</p>
                       <div className="ml-7 space-y-1">
-                        <p className="text-sm"><span className="font-medium text-foreground">{t("aeo.checks.impact")}</span> <span className="text-muted-foreground">{check.impact}</span></p>
+                        <p className="text-sm"><span className="font-medium text-foreground">Impact:</span> <span className="text-muted-foreground">{check.impact}</span></p>
                         {check.status !== "PASS" && (
-                          <p className="text-sm"><span className="font-medium text-foreground">{t("aeo.checks.fix")}</span> <span className="text-muted-foreground">{check.recommendation}</span></p>
+                          <p className="text-sm"><span className="font-medium text-foreground">Fix:</span> <span className="text-muted-foreground">{check.recommendation}</span></p>
                         )}
                       </div>
                       {check.status !== "PASS" && check.technicalFix && <TechnicalFixBlock technicalFix={check.technicalFix} />}
@@ -1064,25 +1015,17 @@ function ChecksDetail({ checks }: { checks: AeoCheck[] }) {
 }
 
 function RecommendationsList({ recommendations }: { recommendations: AeoRecommendation[] }) {
-  const { t } = useTranslation();
-
   const priorityConfig: Record<string, { color: string; border: string }> = {
     Critical: { color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200", border: "border-l-red-500" },
     High: { color: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200", border: "border-l-orange-500" },
     Medium: { color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200", border: "border-l-yellow-500" },
     Low: { color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200", border: "border-l-green-500" },
   };
-  const priorityLabels: Record<string, string> = {
-    Critical: t("standalone.priority.critical"),
-    High: t("standalone.priority.high"),
-    Medium: t("standalone.priority.medium"),
-    Low: t("standalone.priority.low"),
-  };
 
   return (
     <Card className="rounded-xl border border-border shadow-sm">
       <CardContent className="p-6">
-        <h3 className="text-xl font-bold text-foreground mb-6">{t("aeo.recommendations.title")}</h3>
+        <h3 className="text-xl font-bold text-foreground mb-6">Priority Recommendations</h3>
         <div className="space-y-4">
           {recommendations.map((rec, idx) => {
             const config = priorityConfig[rec.priority] || priorityConfig["Medium"];
@@ -1090,7 +1033,7 @@ function RecommendationsList({ recommendations }: { recommendations: AeoRecommen
               <div key={idx} className={`border-l-4 ${config.border} rounded-lg border border-border p-5`}>
                 <div className="flex items-center gap-3 mb-2">
                   <h4 className="text-base font-semibold text-foreground">{rec.title}</h4>
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${config.color}`}>{priorityLabels[rec.priority] || rec.priority}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${config.color}`}>{rec.priority}</span>
                   {rec.category && (
                     <Badge variant="secondary" className="text-xs">{rec.category}</Badge>
                   )}
