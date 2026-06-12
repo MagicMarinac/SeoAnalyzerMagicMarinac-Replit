@@ -2175,6 +2175,8 @@ function AeoCitationCard({ citation }: { citation: CitationLikelihood }) {
   const { t } = useTranslation();
   const ratingColors: Record<string, string> = { "Very Likely": "text-green-600", "Likely": "text-blue-600", "Possible": "text-yellow-600", "Unlikely": "text-red-600" };
   const ratingBg: Record<string, string> = { "Very Likely": "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200", "Likely": "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200", "Possible": "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200", "Unlikely": "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200" };
+  const ratingLabelMap: Record<string, string> = { "Very Likely": t('master.aeo.citationVeryLikely'), "Likely": t('master.aeo.citationLikely'), "Possible": t('master.aeo.citationPossible'), "Unlikely": t('master.aeo.citationUnlikely') };
+  const factorNameMap: Record<string, string> = { "Quotable Content": t('master.aeo.factorQuotableContent'), "Schema Markup": t('master.aeo.factorSchemaMarkup'), "Authority Signals": t('master.aeo.factorAuthoritySignals'), "Content Format": t('master.aeo.factorContentFormat'), "AI Accessibility": t('master.aeo.factorAiAccessibility'), "Content Depth & Structure": t('master.aeo.factorContentDepth') };
 
   return (
     <Card className="rounded-xl border border-border shadow-sm p-6" data-testid="citation-likelihood">
@@ -2187,7 +2189,7 @@ function AeoCitationCard({ citation }: { citation: CitationLikelihood }) {
           <div className={`text-4xl font-bold ${ratingColors[citation.rating] || "text-gray-600"}`}>{citation.score}</div>
           <div>
             <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${ratingBg[citation.rating] || ""}`}>
-              <Zap className="w-3 h-3" />{citation.rating}
+              <Zap className="w-3 h-3" />{ratingLabelMap[citation.rating] || citation.rating}
             </span>
             <p className="text-xs text-muted-foreground mt-1">{t('master.aeo.outOf100')}</p>
           </div>
@@ -2195,7 +2197,7 @@ function AeoCitationCard({ citation }: { citation: CitationLikelihood }) {
         <div className="space-y-2">
           {citation.factors.map((factor, i) => (
             <div key={i} className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground truncate mr-2">{factor.name}</span>
+              <span className="text-muted-foreground truncate mr-2">{factorNameMap[factor.name] || factor.name}</span>
               <div className="flex items-center gap-2">
                 <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
                   <div className={`h-full rounded-full ${factor.score >= factor.maxScore * 0.7 ? "bg-green-500" : factor.score >= factor.maxScore * 0.3 ? "bg-yellow-500" : "bg-red-500"}`} style={{ width: `${(factor.score / factor.maxScore) * 100}%` }} />
