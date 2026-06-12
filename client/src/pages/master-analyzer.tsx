@@ -1228,12 +1228,12 @@ function AdsSection({ data, url, paidTier, onUpgrade }: { data: any; url: string
   const recommendations = data.recommendations as AdsRecommendation[];
 
   const categories = [
-    { name: "Server Speed", icon: Timer, color: "blue", status: results.ttfb.penalized ? "FAIL" : results.ttfb.cleanUrl > 400 ? "WARNING" : "PASS", detail: `${results.ttfb.cleanUrl}ms clean / ${results.ttfb.withAdsParams}ms with ads params` },
-    { name: "CDN & Delivery", icon: Globe, color: "green", status: results.cdn.detected && results.cdn.edgeCaching ? "PASS" : results.cdn.detected ? "WARNING" : "FAIL", detail: results.cdn.detected ? `${results.cdn.provider}${results.cdn.edgeCaching ? " (edge caching active)" : ""}` : "No CDN detected" },
-    { name: "Cache Health", icon: HardDrive, color: "purple", status: results.cache.fragmented ? "FAIL" : "PASS", detail: results.cache.fragmented ? "Cache fragmentation detected" : "Cache handling is healthy" },
-    { name: "Redirect Chain", icon: ArrowRight, color: "orange", status: results.redirects.hops === 0 ? "PASS" : results.redirects.hops === 1 ? "WARNING" : "FAIL", detail: results.redirects.hops === 0 ? "Direct delivery" : `${results.redirects.hops} redirect(s) — ${results.redirects.totalLatency}ms added` },
-    { name: "Hosting", icon: Server, color: "red", status: results.hosting.isLikelyShared ? "FAIL" : results.hosting.coldCacheRisk ? "WARNING" : "PASS", detail: results.hosting.isLikelyShared ? "Shared hosting detected" : results.hosting.serverSignature || "Hosting OK" },
-    { name: "Mobile UX", icon: Smartphone, color: "indigo", status: results.mobileUx.ctaVisibleAboveFold && results.mobileUx.keywordInAboveFold ? "PASS" : !results.mobileUx.ctaVisibleAboveFold && !results.mobileUx.keywordInAboveFold ? "FAIL" : "WARNING", detail: `${results.mobileUx.keywordInAboveFold ? "Keywords match" : "No keyword match"} • ${results.mobileUx.ctaVisibleAboveFold ? "CTA visible" : "CTA not visible"}` },
+    { name: t('standaloneAds.catServerSpeed'), icon: Timer, color: "blue", status: results.ttfb.penalized ? "FAIL" : results.ttfb.cleanUrl > 400 ? "WARNING" : "PASS", detail: t('standaloneAds.detailCleanVsAds', { clean: results.ttfb.cleanUrl, ads: results.ttfb.withAdsParams }) },
+    { name: t('standaloneAds.catCdnDelivery'), icon: Globe, color: "green", status: results.cdn.detected && results.cdn.edgeCaching ? "PASS" : results.cdn.detected ? "WARNING" : "FAIL", detail: results.cdn.detected ? (results.cdn.edgeCaching ? t('standaloneAds.detailCdnEdge', { provider: results.cdn.provider }) : t('standaloneAds.detailCdnNoEdge', { provider: results.cdn.provider })) : t('standaloneAds.detailNoCdn') },
+    { name: t('standaloneAds.catCacheHealth'), icon: HardDrive, color: "purple", status: results.cache.fragmented ? "FAIL" : "PASS", detail: results.cache.fragmented ? t('standaloneAds.detailCacheFrag') : t('standaloneAds.detailCacheHealthy') },
+    { name: t('standaloneAds.catRedirectChain'), icon: ArrowRight, color: "orange", status: results.redirects.hops === 0 ? "PASS" : results.redirects.hops === 1 ? "WARNING" : "FAIL", detail: results.redirects.hops === 0 ? t('standaloneAds.detailDirect') : t('standaloneAds.detailRedirects', { count: results.redirects.hops, latency: results.redirects.totalLatency }) },
+    { name: t('standaloneAds.catHosting'), icon: Server, color: "red", status: results.hosting.isLikelyShared ? "FAIL" : results.hosting.coldCacheRisk ? "WARNING" : "PASS", detail: results.hosting.isLikelyShared ? t('standaloneAds.detailSharedHosting') : (results.hosting.serverSignature || t('standaloneAds.detailHostingOk')) },
+    { name: t('master.ads.mobileUx'), icon: Smartphone, color: "indigo", status: results.mobileUx.ctaVisibleAboveFold && results.mobileUx.keywordInAboveFold ? "PASS" : !results.mobileUx.ctaVisibleAboveFold && !results.mobileUx.keywordInAboveFold ? "FAIL" : "WARNING", detail: `${results.mobileUx.keywordInAboveFold ? t('standaloneAds.detailKeywordsMatch') : t('standaloneAds.detailNoKeywordMatch')} • ${results.mobileUx.ctaVisibleAboveFold ? t('standaloneAds.detailCtaVisible') : t('standaloneAds.detailCtaNotVisible')}` },
   ];
 
   const getIconBg = (c: string) => ({ blue: "bg-blue-100 dark:bg-blue-900", green: "bg-green-100 dark:bg-green-900", purple: "bg-purple-100 dark:bg-purple-900", orange: "bg-orange-100 dark:bg-orange-900", red: "bg-red-100 dark:bg-red-900", indigo: "bg-indigo-100 dark:bg-indigo-900" }[c] || "bg-gray-100");
@@ -1324,7 +1324,7 @@ function AdsSection({ data, url, paidTier, onUpgrade }: { data: any; url: string
                                   {check.status === "PASS" ? <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" /> : check.status === "FAIL" ? <XCircle className="w-5 h-5 text-red-600 flex-shrink-0" /> : <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0" />}
                                   <span className="font-semibold text-foreground">{check.name}</span>
                                   <Badge variant={check.fixType === "infrastructure" ? "default" : "secondary"} className="text-xs ml-2 flex-shrink-0">
-                                    {check.fixType === "infrastructure" ? "Infrastructure" : "Page-level"}
+                                    {check.fixType === "infrastructure" ? t('standaloneAds.infrastructure') : t('standaloneAds.pageLevel')}
                                   </Badge>
                                 </div>
                                 <StatusBadge status={check.status} />
@@ -1362,7 +1362,7 @@ function AdsSection({ data, url, paidTier, onUpgrade }: { data: any; url: string
                             <div className="flex items-center gap-3 mb-2">
                               <h4 className="text-base font-semibold text-foreground">{rec.title}</h4>
                               <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${pc.color}`}>{rec.priority}</span>
-                              <Badge variant={rec.fixType === "infrastructure" ? "default" : "secondary"} className="text-xs">{rec.fixType === "infrastructure" ? "Infrastructure" : "Page-level"}</Badge>
+                              <Badge variant={rec.fixType === "infrastructure" ? "default" : "secondary"} className="text-xs">{rec.fixType === "infrastructure" ? t('standaloneAds.infrastructure') : t('standaloneAds.pageLevel')}</Badge>
                             </div>
                             <p className="text-sm text-muted-foreground mb-3">{rec.description}</p>
                             <p className="text-sm text-muted-foreground mb-3 italic">{rec.impact}</p>
@@ -1404,7 +1404,7 @@ function AdsSection({ data, url, paidTier, onUpgrade }: { data: any; url: string
                       <TrendingDown className="w-5 h-5 text-primary" />
                       <h4 className="font-semibold text-foreground">{t('master.ads.cpcCostImpact')}</h4>
                     </div>
-                    <p className="text-sm text-muted-foreground">{results.cpcImpact}</p>
+                    <p className="text-sm text-muted-foreground">{results.rating === 'Above average' ? t('master.ads.cpcAboveAverage') : results.rating === 'Average' ? t('master.ads.cpcAverage') : t('master.ads.cpcBelowAverage')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -2744,9 +2744,17 @@ function GeoSection({ data, url, paidTier, onUpgrade }: { data: any; url: string
                   </div>
                   {results.sourceAuthority.trustSignals.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1">
-                      {results.sourceAuthority.trustSignals.map((s: string, i: number) => (
-                        <Badge key={i} variant="outline" className="text-xs">{s}</Badge>
-                      ))}
+                      {results.sourceAuthority.trustSignals.map((s: string, i: number) => {
+                        const trustSignalMap: Record<string, string> = {
+                          'Open Graph site identity': t('master.geo.trustSignalOpenGraph'),
+                          'Canonical URL set': t('master.geo.trustSignalCanonical'),
+                          'HTTPS secure': t('master.geo.trustSignalHttps'),
+                          'Organization schema present': t('master.geo.trustSignalOrgSchema'),
+                          'Privacy/Terms links': t('master.geo.trustSignalPrivacyTerms'),
+                          'Social media presence': t('master.geo.trustSignalSocial'),
+                        };
+                        return <Badge key={i} variant="outline" className="text-xs">{trustSignalMap[s] || s}</Badge>;
+                      })}
                     </div>
                   )}
                 </CardContent>

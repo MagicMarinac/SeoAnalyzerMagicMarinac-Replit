@@ -492,7 +492,7 @@ function ImpactExplainer({ rating, qualityScoreImpact, cpcImpact }: { rating: st
               <TrendingDown className="w-5 h-5 text-primary" />
               <h4 className="font-semibold text-foreground">{t('master.ads.cpcCostImpact')}</h4>
             </div>
-            <p className="text-sm text-muted-foreground">{cpcImpact}</p>
+            <p className="text-sm text-muted-foreground">{rating === 'Above average' ? t('master.ads.cpcAboveAverage') : rating === 'Average' ? t('master.ads.cpcAverage') : t('master.ads.cpcBelowAverage')}</p>
           </div>
         </div>
         <div className="mt-6 p-4 bg-muted rounded-lg">

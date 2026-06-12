@@ -281,6 +281,20 @@ function CitationLikelihoodCard({ citation }: { citation: CitationLikelihood }) 
     "Possible": "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200",
     "Unlikely": "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200",
   };
+  const ratingLabels: Record<string, string> = {
+    "Very Likely": t('master.aeo.citationVeryLikely'),
+    "Likely": t('master.aeo.citationLikely'),
+    "Possible": t('master.aeo.citationPossible'),
+    "Unlikely": t('master.aeo.citationUnlikely'),
+  };
+  const factorNames: Record<string, string> = {
+    "Quotable Content": t('master.aeo.factorQuotableContent'),
+    "Schema Markup": t('master.aeo.factorSchemaMarkup'),
+    "Authority Signals": t('master.aeo.factorAuthoritySignals'),
+    "Content Format": t('master.aeo.factorContentFormat'),
+    "AI Accessibility": t('master.aeo.factorAiAccessibility'),
+    "Content Depth & Structure": t('master.aeo.factorContentDepth'),
+  };
 
   return (
     <Card className="rounded-xl border border-border shadow-sm p-6" data-testid="citation-likelihood">
@@ -293,7 +307,7 @@ function CitationLikelihoodCard({ citation }: { citation: CitationLikelihood }) 
           <div className={`text-4xl font-bold ${ratingColors[citation.rating] || "text-gray-600"}`}>{citation.score}</div>
           <div>
             <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${ratingBg[citation.rating] || ""}`}>
-              <Zap className="w-3 h-3" />{citation.rating}
+              <Zap className="w-3 h-3" />{ratingLabels[citation.rating] || citation.rating}
             </span>
             <p className="text-xs text-muted-foreground mt-1">{t('master.aeo.outOf100')}</p>
           </div>
@@ -301,7 +315,7 @@ function CitationLikelihoodCard({ citation }: { citation: CitationLikelihood }) 
         <div className="space-y-2">
           {citation.factors.map((factor, i) => (
             <div key={i} className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground truncate mr-2">{factor.name}</span>
+              <span className="text-muted-foreground truncate mr-2">{factorNames[factor.name] || factor.name}</span>
               <div className="flex items-center gap-2">
                 <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
                   <div
@@ -322,6 +336,7 @@ function CitationLikelihoodCard({ citation }: { citation: CitationLikelihood }) 
 function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
+  const typeCount = new Set(preview.quotableExcerpts.map(e => e.type)).size;
   const qualityColors: Record<string, string> = {
     High: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
     Medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
@@ -354,7 +369,7 @@ function AiSearchPreviewCard({ preview }: { preview: AiSearchPreview }) {
             {t(`master.aeo.extractionQuality${preview.extractionQuality}`)} {t('master.aeo.extractionQualitySuffix')}
           </span>
         </div>
-        <p className="text-sm text-muted-foreground mb-4">{preview.extractionDetails}</p>
+        <p className="text-sm text-muted-foreground mb-4">{t(`master.aeo.extractionDetails${preview.extractionQuality}`, { count: preview.quotableExcerpts.length, types: typeCount || 1 })}</p>
 
         <div className="bg-muted/50 rounded-lg border border-border p-4 mb-4">
           <div className="flex items-center gap-2 mb-2">
@@ -409,6 +424,16 @@ function SchemaGeneratorCard({ suggestions }: { suggestions: SchemaSuggestion[] 
     setCopiedIndex(index);
     setTimeout(() => setCopiedIndex(null), 2000);
   };
+
+  const schemaDescMap: Record<string, string> = {
+    Organization: t('master.aeo.schemaDescOrganization'),
+    FAQPage: t('master.aeo.schemaDescFAQPage'),
+    Article: t('master.aeo.schemaDescArticle'),
+    HowTo: t('master.aeo.schemaDescHowTo'),
+    BreadcrumbList: t('master.aeo.schemaDescBreadcrumbList'),
+  };
+  const getSchemaDesc = (s: SchemaSuggestion) =>
+    s.alreadyPresent ? t('master.aeo.schemaDescAlreadyPresent') : (schemaDescMap[s.type] || s.description);
 
   const needsAction = suggestions.filter(s => !s.alreadyPresent);
   const present = suggestions.filter(s => s.alreadyPresent);
@@ -470,7 +495,7 @@ function SchemaGeneratorCard({ suggestions }: { suggestions: SchemaSuggestion[] 
                     </button>
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground">{suggestion.description}</p>
+                <p className="text-xs text-muted-foreground">{getSchemaDesc(suggestion)}</p>
                 {isExpanded && (
                   <pre className="mt-2 p-3 bg-muted/50 rounded-lg text-xs font-mono overflow-x-auto text-foreground max-h-48 overflow-y-auto border border-border" data-testid="schema-code">
                     {`<script type="application/ld+json">\n${suggestion.code}\n</script>`}
@@ -487,6 +512,18 @@ function SchemaGeneratorCard({ suggestions }: { suggestions: SchemaSuggestion[] 
 
 function ContentGapFinderCard({ gaps }: { gaps: ContentGapsAnalysis }) {
   const { t } = useTranslation();
+  const failCount = gaps.findings.filter(f => f.status === 'fail').length;
+  const warnCount = gaps.findings.filter(f => f.status === 'warning').length;
+  const passCount = gaps.findings.filter(f => f.status === 'pass').length;
+  const coverageDetailsText = gaps.findings.length === 0
+    ? t('master.aeo.coverageDetailsInsufficient')
+    : failCount > 0
+      ? t('master.aeo.coverageDetailsFail', { failCount, warnCount })
+      : warnCount > 0
+        ? t('master.aeo.coverageDetailsWarn', { warnCount })
+        : passCount > 0
+          ? t('master.aeo.coverageDetailsPass', { passCount })
+          : t('master.aeo.coverageDetailsGood');
   return (
     <Card className="rounded-xl border border-border shadow-sm" data-testid="content-gaps">
       <CardContent className="p-6">
@@ -514,7 +551,7 @@ function ContentGapFinderCard({ gaps }: { gaps: ContentGapsAnalysis }) {
           </div>
         </div>
 
-        <p className="text-sm text-muted-foreground mb-3">{gaps.coverageDetails}</p>
+        <p className="text-sm text-muted-foreground mb-3">{coverageDetailsText}</p>
 
 
         {gaps.findings.length > 0 && (

@@ -707,7 +707,10 @@
       },
       "infrastructure": "Infrastructure",
       "pageLevel": "Page-level",
-      "priorityRecommendations": "Priority Recommendations"
+      "priorityRecommendations": "Priority Recommendations",
+      "cpcAboveAverage": "Above average landing pages typically see 16-50% lower CPC compared to below average pages. Your ads will also get priority in ad auctions, appearing more often and in higher positions.",
+      "cpcAverage": "Average landing pages pay standard CPC rates. Improving to Above average could reduce your CPC by 16-30% and improve ad rank without increasing bids.",
+      "cpcBelowAverage": "Below average landing pages pay 25-400% more per click than Above average pages. Google reduces your impression share and ad positions. Fixing infrastructure and UX issues can dramatically reduce your ad spend."
     },
     "labels": {
       "seo": "SEO",
@@ -835,7 +838,27 @@
       "detailedChecksTitle": "Detailed Check Results",
       "technicalFixHint": "Click \"Technical Fix Guide\" on any failing check for step-by-step instructions with code examples",
       "impactLabel": "Impact:",
-      "fixLabel": "Fix:"
+      "fixLabel": "Fix:",
+      "extractionDetailsHigh": "Found {{count}} quotable excerpt(s) across {{types}} content type(s). AI engines have rich content to extract from.",
+      "extractionDetailsMedium": "Found {{count}} quotable excerpt(s) across {{types}} content type(s). Some content is extractable, but adding more structured answers would help.",
+      "extractionDetailsLow": "Found {{count}} quotable excerpt(s) across {{types}} content type(s). Very limited extractable content. Add concise answer paragraphs, FAQs, and lists.",
+      "factorQuotableContent": "Quotable Content",
+      "factorSchemaMarkup": "Schema Markup",
+      "factorAuthoritySignals": "Authority Signals",
+      "factorContentFormat": "Content Format",
+      "factorAiAccessibility": "AI Accessibility",
+      "factorContentDepth": "Content Depth & Structure",
+      "schemaDescOrganization": "Establishes your brand identity in AI knowledge graphs. AI systems use this to attribute content to your organization.",
+      "schemaDescFAQPage": "FAQ schema is one of the most effective ways to get content cited by AI. Questions and answers are directly extractable.",
+      "schemaDescArticle": "Helps AI systems identify this as authoritative content with author attribution and publication context.",
+      "schemaDescHowTo": "Step-by-step content detected. HowTo schema makes your instructions directly extractable by AI assistants.",
+      "schemaDescBreadcrumbList": "Helps AI understand your site hierarchy and content relationships.",
+      "schemaDescAlreadyPresent": "Already present on your page.",
+      "coverageDetailsGood": "Semantic analysis completed. Content structure appears coherent.",
+      "coverageDetailsFail": "Semantic analysis found {{failCount}} critical alignment issue(s) and {{warnCount}} area(s) for improvement.",
+      "coverageDetailsWarn": "Semantic analysis found {{warnCount}} area(s) where AI retrieval clarity could be strengthened.",
+      "coverageDetailsPass": "Semantic analysis passed {{passCount}} coherence check(s). Content positioning is well-aligned for AI retrieval.",
+      "coverageDetailsInsufficient": "More page content is needed to assess semantic coverage accurately."
     },
     "geo": {
       "readinessScore": "GEO Readiness Score",
@@ -878,7 +901,13 @@
       "impactSuffix": "Impact",
       "impactHigh": "High",
       "impactMedium": "Medium",
-      "impactLow": "Low"
+      "impactLow": "Low",
+      "trustSignalOpenGraph": "Open Graph site identity",
+      "trustSignalCanonical": "Canonical URL set",
+      "trustSignalHttps": "HTTPS secure",
+      "trustSignalOrgSchema": "Organization schema present",
+      "trustSignalPrivacyTerms": "Privacy/Terms links",
+      "trustSignalSocial": "Social media presence"
     },
     "brokenLinks": {
       "healthScore": "Health Score",

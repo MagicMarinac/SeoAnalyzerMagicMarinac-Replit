@@ -707,7 +707,10 @@
       },
       "infrastructure": "Infrastruktura",
       "pageLevel": "Na razini stranice",
-      "priorityRecommendations": "Prioritetne preporuke"
+      "priorityRecommendations": "Prioritetne preporuke",
+      "cpcAboveAverage": "Odredišne stranice iznad prosjeka tipično ostvaruju 16-50% nižu CPC u usporedbi s ispodprosječnim stranicama. Vaši oglasi dobit će prioritet na oglasnim aukcijama, pojavljujući se češće i na višim pozicijama.",
+      "cpcAverage": "Prosječne odredišne stranice plaćaju standardne CPC stope. Poboljšanje na iznad prosjeka moglo bi smanjiti vašu CPC za 16-30% i poboljšati rang oglasa bez povećanja ponuda.",
+      "cpcBelowAverage": "Ispodprosječne odredišne stranice plaćaju 25-400% više po kliku od iznadprosječnih stranica. Google smanjuje vaš udio pojavljivanja i pozicije oglasa. Popravljanje infrastrukture i UX problema može dramatično smanjiti vaše troškove oglašavanja."
     },
     "labels": {
       "seo": "SEO",
@@ -835,7 +838,27 @@
       "detailedChecksTitle": "Detaljni rezultati provjere",
       "technicalFixHint": "Kliknite \"Vodič za tehničke popravke\" na bilo kojoj neuspješnoj provjeri za upute korak po korak s primjerima koda",
       "impactLabel": "Utjecaj:",
-      "fixLabel": "Popravak:"
+      "fixLabel": "Popravak:",
+      "extractionDetailsHigh": "Pronađeno {{count}} citabilnih odlomaka u {{types}} vrsta sadržaja. AI sustavi imaju bogat sadržaj za ekstrakciju.",
+      "extractionDetailsMedium": "Pronađeno {{count}} citabilnih odlomaka u {{types}} vrsta sadržaja. Dio sadržaja je ekstraktibilan, ali dodavanje više strukturiranih odgovora bi pomoglo.",
+      "extractionDetailsLow": "Pronađeno {{count}} citabilnih odlomaka u {{types}} vrsta sadržaja. Vrlo ograničen ekstraktibilan sadržaj. Dodajte sažete odlomke s odgovorima, FAQ sekcije i popise.",
+      "factorQuotableContent": "Citabilni sadržaj",
+      "factorSchemaMarkup": "Schema markup",
+      "factorAuthoritySignals": "Signali autoriteta",
+      "factorContentFormat": "Format sadržaja",
+      "factorAiAccessibility": "AI dostupnost",
+      "factorContentDepth": "Dubina i struktura sadržaja",
+      "schemaDescOrganization": "Uspostavlja identitet vašeg brenda u AI grafovima znanja. AI sustavi koriste ovo za pripisivanje sadržaja vašoj organizaciji.",
+      "schemaDescFAQPage": "FAQ schema jedan je od najučinkovitijih načina da AI citira vaš sadržaj. Pitanja i odgovori su izravno ekstraktibilni.",
+      "schemaDescArticle": "Pomaže AI sustavima prepoznati ovo kao autoritativan sadržaj s atribucijom autora i kontekstom objave.",
+      "schemaDescHowTo": "Otkriven sadržaj korak po korak. HowTo schema čini vaše upute izravno ekstraktibilnima za AI asistente.",
+      "schemaDescBreadcrumbList": "Pomaže AI-u razumjeti hijerarhiju vašeg web mjesta i veze između sadržaja.",
+      "schemaDescAlreadyPresent": "Već prisutno na vašoj stranici.",
+      "coverageDetailsGood": "Semantička analiza dovršena. Struktura sadržaja izgleda dosljedna.",
+      "coverageDetailsFail": "Semantička analiza pronašla je {{failCount}} kritičnih problema poravnanja i {{warnCount}} područja za poboljšanje.",
+      "coverageDetailsWarn": "Semantička analiza pronašla je {{warnCount}} područja gdje bi se mogla ojačati jasnoća AI preuzimanja.",
+      "coverageDetailsPass": "Semantička analiza prošla je {{passCount}} provjera dosljednosti. Pozicioniranje sadržaja dobro je usklađeno za AI preuzimanje.",
+      "coverageDetailsInsufficient": "Potrebno je više sadržaja stranice za točnu procjenu semantičke pokrivenosti."
     },
     "geo": {
       "readinessScore": "GEO rezultat spremnosti",
@@ -878,7 +901,13 @@
       "impactSuffix": "utjecaj",
       "impactHigh": "Visoki",
       "impactMedium": "Srednji",
-      "impactLow": "Niski"
+      "impactLow": "Niski",
+      "trustSignalOpenGraph": "Open Graph identitet web mjesta",
+      "trustSignalCanonical": "Kanonički URL postavljen",
+      "trustSignalHttps": "HTTPS siguran",
+      "trustSignalOrgSchema": "Organization schema prisutna",
+      "trustSignalPrivacyTerms": "Poveznice na privatnost/uvjete",
+      "trustSignalSocial": "Prisutnost na društvenim mrežama"
     },
     "brokenLinks": {
       "healthScore": "Rezultat zdravlja",
