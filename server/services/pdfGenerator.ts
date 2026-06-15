@@ -811,9 +811,9 @@ const PDF_LABELS: Record<Lang, PdfLabels> = {
     generated: 'Generated',
     overall: 'Overall',
     overallDashboard: 'Overall Score Dashboard',
-    snapshot: '8 tools · Snapshot',
-    fullDataIncluded: '8 tools · All data included',
-    fullDataPlusFixes: '8 tools · Full data + fixes',
+    snapshot: '7 sections · Snapshot',
+    fullDataIncluded: '7 sections · All data included',
+    fullDataPlusFixes: '7 sections · Full data + fixes',
     keyFindings: 'Key Findings',
     issuesFound: (n: number) => `${n} issues found`,
     moreHidden: (n: number) => `+ ${n} more issues hidden — unlock to see all`,
@@ -868,9 +868,9 @@ const PDF_LABELS: Record<Lang, PdfLabels> = {
     generated: 'Generirano',
     overall: 'Ukupno',
     overallDashboard: 'Pregled ukupnih ocjena',
-    snapshot: '8 alata · Pregled',
-    fullDataIncluded: '8 alata · Svi podaci uključeni',
-    fullDataPlusFixes: '8 alata · Svi podaci + popravci',
+    snapshot: '7 sekcija · Pregled',
+    fullDataIncluded: '7 sekcija · Svi podaci uključeni',
+    fullDataPlusFixes: '7 sekcija · Svi podaci + popravci',
     keyFindings: 'Ključni nalazi',
     issuesFound: (n: number) => `Pronađeno ${n} problema`,
     moreHidden: (n: number) => `+ ${n} dodatnih problema skriveno — otključajte za sve`,
@@ -1994,6 +1994,30 @@ export async function generateMasterPdfReport(data: MasterResult, tier: 'free' |
       if (data.imageOptimization?.data)toolList.push({ key: 'images',   score: data.imageOptimization.data.score ?? 0,    data: data.imageOptimization.data });
       if (data.internalLinking?.data)  toolList.push({ key: 'internal', score: data.internalLinking.data.score ?? 0,      data: data.internalLinking.data });
 
+      // Merge sitemap/robots/llms checks INTO the AEO toolList entry so that
+      // ALL tiers (free findings cards, basic/pro section cards) render them
+      // inside the AEO block instead of as a separate standalone section.
+      if (data.sitemapValidator?.data) {
+        const aeoEntry = toolList.find(t => t.key === 'aeo');
+        if (aeoEntry) {
+          const sitemapChecks = getToolChecks('sitemap', data.sitemapValidator.data, L);
+          const baseChecks: any[] = Array.isArray(aeoEntry.data.results?.checks)
+            ? aeoEntry.data.results.checks
+            : [];
+          aeoEntry.data = {
+            ...aeoEntry.data,
+            results: {
+              ...(aeoEntry.data.results || {}),
+              checks: [...baseChecks, ...sitemapChecks],
+            },
+            recommendations: [
+              ...(aeoEntry.data.recommendations || []),
+              ...(data.sitemapValidator.data.recommendations || []),
+            ],
+          };
+        }
+      }
+
       const overallAvg = toolList.length > 0
         ? Math.round(toolList.reduce((s, t) => s + t.score, 0) / toolList.length)
         : 0;
@@ -2258,26 +2282,10 @@ export async function generateMasterPdfReport(data: MasterResult, tier: 'free' |
         renderToolSection('ads', L.toolNames.ads, data.ads.data.results?.score ?? 0, data.ads.data, data.ads.data.recommendations);
       }
       if (data.aeo?.data) {
-        // Merge sitemap/robots/llms checks INSIDE the AEO section card (80/20 score
-        // already blended server-side). This keeps the PDF layout as 7 sections
-        // while preserving all discoverability data inside the AEO block.
-        let aeoRenderData = data.aeo.data;
-        let aeoRecs: any[] = data.aeo.data.recommendations || [];
-        if (data.sitemapValidator?.data) {
-          const sitemapChecks = getToolChecks('sitemap', data.sitemapValidator.data, L);
-          const baseChecks: any[] = Array.isArray(data.aeo.data.results?.checks)
-            ? data.aeo.data.results.checks
-            : [];
-          aeoRenderData = {
-            ...data.aeo.data,
-            results: {
-              ...(data.aeo.data.results || {}),
-              checks: [...baseChecks, ...sitemapChecks],
-            },
-          };
-          aeoRecs = [...(data.aeo.data.recommendations || []), ...(data.sitemapValidator.data.recommendations || [])];
-        }
-        renderToolSection('aeo', L.toolNames.aeo, data.aeo.data.results?.score ?? 0, aeoRenderData, aeoRecs);
+        // Use the toolList entry which already has sitemap checks merged in (done above).
+        const aeoEntry = toolList.find(t => t.key === 'aeo');
+        const aeoData = aeoEntry ? aeoEntry.data : data.aeo.data;
+        renderToolSection('aeo', L.toolNames.aeo, data.aeo.data.results?.score ?? 0, aeoData, aeoData.recommendations);
       }
       if (data.geo?.data) {
         renderToolSection('geo', L.toolNames.geo, data.geo.data.results?.score ?? 0, data.geo.data, data.geo.data.recommendations);
