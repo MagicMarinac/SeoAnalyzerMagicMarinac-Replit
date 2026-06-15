@@ -307,9 +307,9 @@ export default function CheckoutPage() {
                   />
                   <Label htmlFor="checkout-terms" className="text-sm font-normal leading-snug cursor-pointer select-none">
                     {t('seo.checkout.termsAcceptPrefix')}{' '}
-                    <Link href="/terms" className="underline underline-offset-2 hover:text-primary">{t('seo.checkout.termsAcceptTerms')}</Link>
+                    <Link href="/terms-of-service" className="underline underline-offset-2 hover:text-primary">{t('seo.checkout.termsAcceptTerms')}</Link>
                     {' '}{t('seo.checkout.termsAcceptAnd')}{' '}
-                    <Link href="/privacy" className="underline underline-offset-2 hover:text-primary">{t('footer.privacy')}</Link>.
+                    <Link href="/privacy-policy" className="underline underline-offset-2 hover:text-primary">{t('footer.privacy')}</Link>.
                   </Label>
                 </div>
 
