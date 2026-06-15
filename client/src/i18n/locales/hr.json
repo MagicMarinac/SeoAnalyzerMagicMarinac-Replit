@@ -75,7 +75,7 @@
     "remove": "Ukloni pristupni kôd"
   },
   "loading": {
-    "title": "Pokrećem svih 8 alata za analizu...",
+    "title": "Pokrećem svih 7 sekcija analize...",
     "description": "Ovo pokreće SEO, Ads, AEO (uklj. Sitemap/Robots/LLMs), GEO, provjeru linkova, slika i internih linkova paralelno. Može potrajati do jedne minute."
   },
   "dashboard": {

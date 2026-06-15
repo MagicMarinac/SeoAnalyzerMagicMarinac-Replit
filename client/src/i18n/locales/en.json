@@ -75,7 +75,7 @@
     "remove": "Remove access code"
   },
   "loading": {
-    "title": "Running all 8 analysis tools...",
+    "title": "Running all 7 analysis sections...",
     "description": "This runs SEO, Ads, AEO (incl. Sitemap/Robots/LLMs), GEO, Broken Links, Images, and Internal Linking in parallel. It may take up to a minute."
   },
   "dashboard": {

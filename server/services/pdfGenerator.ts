@@ -2258,12 +2258,26 @@ export async function generateMasterPdfReport(data: MasterResult, tier: 'free' |
         renderToolSection('ads', L.toolNames.ads, data.ads.data.results?.score ?? 0, data.ads.data, data.ads.data.recommendations);
       }
       if (data.aeo?.data) {
-        renderToolSection('aeo', L.toolNames.aeo, data.aeo.data.results?.score ?? 0, data.aeo.data, data.aeo.data.recommendations);
-        // Sitemap/Robots/LLMs checks are merged into the AEO section (score already
-        // blended 80/20 server-side). Render the sitemap sub-block directly after AEO.
+        // Merge sitemap/robots/llms checks INSIDE the AEO section card (80/20 score
+        // already blended server-side). This keeps the PDF layout as 7 sections
+        // while preserving all discoverability data inside the AEO block.
+        let aeoRenderData = data.aeo.data;
+        let aeoRecs: any[] = data.aeo.data.recommendations || [];
         if (data.sitemapValidator?.data) {
-          renderToolSection('sitemap', L.toolNames.sitemap, data.sitemapValidator.data.score ?? 0, data.sitemapValidator.data, data.sitemapValidator.data.recommendations);
+          const sitemapChecks = getToolChecks('sitemap', data.sitemapValidator.data, L);
+          const baseChecks: any[] = Array.isArray(data.aeo.data.results?.checks)
+            ? data.aeo.data.results.checks
+            : [];
+          aeoRenderData = {
+            ...data.aeo.data,
+            results: {
+              ...(data.aeo.data.results || {}),
+              checks: [...baseChecks, ...sitemapChecks],
+            },
+          };
+          aeoRecs = [...(data.aeo.data.recommendations || []), ...(data.sitemapValidator.data.recommendations || [])];
         }
+        renderToolSection('aeo', L.toolNames.aeo, data.aeo.data.results?.score ?? 0, aeoRenderData, aeoRecs);
       }
       if (data.geo?.data) {
         renderToolSection('geo', L.toolNames.geo, data.geo.data.results?.score ?? 0, data.geo.data, data.geo.data.recommendations);
