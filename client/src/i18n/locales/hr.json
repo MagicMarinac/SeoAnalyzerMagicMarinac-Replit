@@ -1286,7 +1286,9 @@
     },
     "checkout": {
       "title": "Naplata — Otključajte Pro popravke | FreeSiteAnalyzer",
-      "description": "Sigurna naplata za FreeSiteAnalyzer Basic (€19) ili Pro (€29). Dobijte sve podatke i gotove popravke za SEO, AEO, GEO i Google Ads."
+      "description": "Sigurna naplata za FreeSiteAnalyzer Basic (€19) ili Pro (€29). Dobijte sve podatke i gotove popravke za SEO, AEO, GEO i Google Ads.",
+      "termsAcceptPrefix": "Prihvaćam",
+      "termsAcceptAnd": "i"
     },
     "privacy": {
       "title": "Politika privatnosti | FreeSiteAnalyzer",

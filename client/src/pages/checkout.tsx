@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -29,6 +30,7 @@ export default function CheckoutPage() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const [submitting, setSubmitting] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [customerForm, setCustomerForm] = useState<CheckoutCustomerForm>({
     email: "",
     firstName: "",
@@ -296,11 +298,27 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
+                <div className="flex items-start gap-3 py-2">
+                  <Checkbox
+                    id="checkout-terms"
+                    checked={termsAccepted}
+                    onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                    data-testid="checkbox-terms-accepted"
+                  />
+                  <Label htmlFor="checkout-terms" className="text-sm font-normal leading-snug cursor-pointer select-none">
+                    {t('seo.checkout.termsAcceptPrefix')}{' '}
+                    <Link href="/terms" className="underline underline-offset-2 hover:text-primary">{t('footer.terms')}</Link>
+                    {' '}{t('seo.checkout.termsAcceptAnd')}{' '}
+                    <Link href="/privacy" className="underline underline-offset-2 hover:text-primary">{t('footer.privacy')}</Link>.
+                  </Label>
+                </div>
+
                 <div className="flex flex-wrap gap-2">
                   <Button
                     onClick={handleProceed}
                     disabled={
                       submitting ||
+                      !termsAccepted ||
                       !customerForm.email.trim() ||
                       !customerForm.firstName.trim() ||
                       !customerForm.lastName.trim()

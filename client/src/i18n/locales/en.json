@@ -1286,7 +1286,9 @@
     },
     "checkout": {
       "title": "Checkout — Unlock Pro Fixes | FreeSiteAnalyzer",
-      "description": "Secure checkout for FreeSiteAnalyzer Basic (€19) or Pro (€29). Get full audit data and copy-paste SEO, AEO, GEO and Ads fixes."
+      "description": "Secure checkout for FreeSiteAnalyzer Basic (€19) or Pro (€29). Get full audit data and copy-paste SEO, AEO, GEO and Ads fixes.",
+      "termsAcceptPrefix": "I accept the",
+      "termsAcceptAnd": "and"
     },
     "privacy": {
       "title": "Privacy Policy | FreeSiteAnalyzer",
