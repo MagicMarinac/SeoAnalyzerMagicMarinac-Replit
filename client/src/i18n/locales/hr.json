@@ -1253,7 +1253,7 @@
       },
       "basicVsPro": {
         "q": "Trebam li kupiti FreeSiteAnalyzer Basic ili Pro za popravak SEO-a?",
-        "a": "Basic je cjeloviti izvještaj s podacima — svi problemi, svi nalazi, cijeli PDF, 3 skeniranja. Pro je Basic plus stvarna rješenja: gotove meta oznake, JSON-LD blokovi, robots/sitemap isječci i upute korak po korak za svaki problem koji pronađemo. Ako želite sami popravljati ili predati developeru jasnu listu zadataka, odaberite Pro. Pro uključuje i 10 skeniranja kako biste mogli ponovno testirati nakon svakog popravka."
+        "a": "Basic je cjeloviti izvještaj s podacima — svi problemi, svi nalazi, cijeli PDF, 5 skeniranja. Pro je Basic plus stvarna rješenja: gotove meta oznake, JSON-LD blokovi, robots/sitemap isječci i upute korak po korak za svaki problem koji pronađemo. Ako želite sami popravljati ili predati developeru jasnu listu zadataka, odaberite Pro. Pro uključuje i 10 skeniranja kako biste mogli ponovno testirati nakon svakog popravka."
       },
       "aiReady": {
         "q": "Kako se rangirati u ChatGPT-u, Perplexityju i Google AI pregledima?",
@@ -1261,7 +1261,7 @@
       },
       "whoFor": {
         "q": "Tko bi trebao koristiti FreeSiteAnalyzer — marketingaši, developeri ili agencije?",
-        "a": "Marketingaši, osnivači, freelanceri, developeri i agencije — svi koriste FreeSiteAnalyzer. Marketingaši i osnivači dobivaju brzu i poštenu sliku kako stranica radi u Google pretrazi, u ocjeni kvalitete Google Adsa i u AI tražilicama. Developeri dobivaju gotove meta oznake, schema, robots i HTML isječke koje mogu odmah ubaciti u kod. Agencije koriste PDF izvještaj kao isporuku spremnu za klijenta — bez učenja deset različitih alata ili ručne revizije."
+        "a": "Marketingaši, osnivači, freelanceri, developeri i agencije — svi koriste FreeSiteAnalyzer. Marketingaši i osnivači dobivaju brzu i poštenu sliku kako stranica radi u Google pretrazi, u ocjeni kvalitete Google Adsa i u AI tražilicama. Developeri dobivaju primjere meta oznaka, schema, robots.txt i HTML isječke koje mogu prilagoditi i ubaciti u kod. Agencije koriste PDF izvještaj kao isporuku spremnu za klijenta — bez učenja deset različitih alata ili ručne revizije."
       },
       "needSignup": {
         "q": "Mogu li pokrenuti SEO analizu bez registracije ili otvaranja računa?",
@@ -1269,7 +1269,7 @@
       },
       "refund": {
         "q": "Nudi li FreeSiteAnalyzer jamstvo povrata novca za SEO izvještaj?",
-        "a": "Da. I Basic i Pro dolaze s jamstvom povrata novca. Ako vam izvještaj ne donese konkretne uvide, kontaktirajte podršku i vraćamo vam novac. Jednokratno plaćanje, bez pretplate, bez sitnih slova."
+        "a": "Da. I Basic i Pro dolaze s jamstvom povrata novca u roku od 14 dana od dana uplate, ako usluga nije isporučena ili ima značajan nedostatak. Ako vam izvještaj ne donese konkretne uvide, kontaktirajte podršku i vraćamo vam novac. Jednokratno plaćanje, bez pretplate, bez sitnih slova."
       },
       "howFixes": {
         "q": "Kako brzo popraviti SEO probleme — daje li FreeSiteAnalyzer gotov kod?",
