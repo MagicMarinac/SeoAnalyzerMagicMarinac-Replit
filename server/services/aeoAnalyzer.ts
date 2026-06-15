@@ -369,6 +369,8 @@ class AeoAnalyzer {
 
     const lang = $("html").attr("lang");
 
+    const { markdownReadable, markdownMethod } = await this.probeMarkdownReadability(url);
+
     return {
       robotsTxtAllowsAi,
       blockedCrawlers,
@@ -379,7 +381,67 @@ class AeoAnalyzer {
       cleanTextExtraction,
       wordCount,
       languageDeclared: !!lang,
+      markdownReadable,
+      markdownMethod,
     };
+  }
+
+  private async probeMarkdownReadability(url: string): Promise<{
+    markdownReadable: boolean;
+    markdownMethod: 'negotiation' | 'linked-files' | 'none';
+  }> {
+    try {
+      const origin = new URL(url).origin;
+
+      // Probe 1: Accept: text/markdown header
+      try {
+        const res = await fetch(url, {
+          headers: { 'Accept': 'text/markdown, text/plain;q=0.9' },
+          signal: AbortSignal.timeout(5000),
+        });
+        const ct = res.headers.get('content-type') || '';
+        if (res.ok && ct.includes('text/markdown')) {
+          return { markdownReadable: true, markdownMethod: 'negotiation' };
+        }
+      } catch {}
+
+      // Probe 2: ?format=markdown query param
+      try {
+        const mdUrl = new URL(url);
+        mdUrl.searchParams.set('format', 'markdown');
+        const res = await fetch(mdUrl.toString(), {
+          signal: AbortSignal.timeout(5000),
+        });
+        const ct = res.headers.get('content-type') || '';
+        if (res.ok && ct.includes('text/markdown')) {
+          return { markdownReadable: true, markdownMethod: 'negotiation' };
+        }
+      } catch {}
+
+      // Probe 3: scan llms.txt and llms-full.txt for linked .md files
+      for (const file of ['/llms.txt', '/llms-full.txt']) {
+        try {
+          const res = await fetch(`${origin}${file}`, {
+            signal: AbortSignal.timeout(5000),
+          });
+          if (!res.ok) continue;
+          const text = await res.text();
+          const mdLinks = [...text.matchAll(/https?:\/\/[^\s"'<>]+\.md(?:\?[^\s"'<>]*)?/gi)].map(m => m[0]);
+          for (const link of mdLinks.slice(0, 3)) {
+            try {
+              const linkRes = await fetch(link, { signal: AbortSignal.timeout(4000) });
+              if (linkRes.ok) {
+                return { markdownReadable: true, markdownMethod: 'linked-files' };
+              }
+            } catch {}
+          }
+        } catch {}
+      }
+
+      return { markdownReadable: false, markdownMethod: 'none' };
+    } catch {
+      return { markdownReadable: false, markdownMethod: 'none' };
+    }
   }
 
   private scoreStructuredData(data: StructuredDataAnalysis): number {
@@ -446,6 +508,8 @@ class AeoAnalyzer {
     if (data.cleanTextExtraction) score += 15;
     if (data.wordCount >= 300) score += 10;
     if (data.languageDeclared) score += 5;
+    if (data.markdownMethod === 'negotiation') score += 5;
+    else if (data.markdownMethod === 'linked-files') score += 3;
     return Math.min(100, score);
   }
 
@@ -1047,6 +1111,81 @@ class AeoAnalyzer {
         '  <p lang="fr">Contenu en français</p>',
         "",
         "STEP 3 — WordPress: Settings → General → Site Language",
+      ].join("\n") : undefined,
+    });
+
+    checks.push({
+      name: this.L("Machine-Readable Markdown", "Strojno čitljiv Markdown"),
+      status: ai.markdownMethod === 'negotiation' ? "PASS" : ai.markdownMethod === 'linked-files' ? "WARNING" : "FAIL",
+      details: ai.markdownMethod === 'negotiation'
+        ? this.L(
+            "Supports content negotiation — responds with text/markdown via Accept header or ?format=markdown",
+            "Podržava content negotiation — odgovara s text/markdown putem Accept zaglavlja ili ?format=markdown"
+          )
+        : ai.markdownMethod === 'linked-files'
+          ? this.L(
+              "Linked markdown files found in llms.txt — content is partially AI-readable; consider adding server-side content negotiation",
+              "Pronađene povezane markdown datoteke u llms.txt — sadržaj je djelomično čitljiv AI sustavima; preporuča se dodati server-side content negotiation"
+            )
+          : this.L(
+              "No markdown readability detected — neither content negotiation nor linked .md files found",
+              "Nije otkrivena podrška za markdown — ni content negotiation ni povezane .md datoteke nisu pronađene"
+            ),
+      category: "discoverability",
+      impact: this.L(
+        "AI agents and LLM crawlers (such as GPTBot, Perplexity, Claude) prefer clean markdown over HTML because it strips navigation, ads, and boilerplate. Sites that serve markdown — via content negotiation or static .md files — give AI engines higher-fidelity content to index and cite.",
+        "AI agenti i LLM crawleri (poput GPTBot, Perplexity, Claude) preferiraju čisti markdown umjesto HTML-a jer uklanja navigaciju, reklame i nepotreban sadržaj. Stranice koje pružaju markdown — putem content negotiation ili statičnih .md datoteka — daju AI motorima kvalitetniji sadržaj za indeksiranje i citiranje."
+      ),
+      recommendation: ai.markdownMethod === 'negotiation'
+        ? this.L(
+            "Excellent — content negotiation is the gold standard for AI-readable content.",
+            "Izvrsno — content negotiation je zlatni standard za AI čitljiv sadržaj."
+          )
+        : ai.markdownMethod === 'linked-files'
+          ? this.L(
+              "Good start — your linked .md files are accessible. Add server-side content negotiation for full coverage.",
+              "Dobar početak — vaše povezane .md datoteke su dostupne. Dodajte server-side content negotiation za potpunu pokrivenost."
+            )
+          : this.L(
+              "Implement at least one markdown readability method to improve AI discoverability.",
+              "Implementirajte barem jednu metodu markdown čitljivosti kako biste poboljšali AI pretraživost."
+            ),
+      technicalFix: ai.markdownMethod !== 'negotiation' ? [
+        "METHOD A — Server-side content negotiation (ideal for dynamic sites):",
+        "",
+        "  Node.js / Express:",
+        "  app.get('*', (req, res, next) => {",
+        "    const accept = req.headers['accept'] || '';",
+        "    const fmt = req.query.format;",
+        "    if (accept.includes('text/markdown') || fmt === 'markdown') {",
+        "      // fetch or generate markdown for this route",
+        "      res.set('Content-Type', 'text/markdown; charset=utf-8');",
+        "      return res.send(markdownForRoute(req.path));",
+        "    }",
+        "    next();",
+        "  });",
+        "",
+        "  Nginx: use map + proxy_set_header to route Accept: text/markdown",
+        "  to a markdown rendering service upstream.",
+        "",
+        "METHOD B — Static .md files + llms.txt (ideal for static sites):",
+        "",
+        "  1. Create a /docs/ folder with .md versions of key pages:",
+        "     /docs/index.md, /docs/about.md, /docs/blog/my-post.md",
+        "",
+        "  2. Create or update /llms.txt to link them:",
+        "     # Markdown versions",
+        "     - https://yoursite.com/docs/index.md",
+        "     - https://yoursite.com/docs/about.md",
+        "",
+        "  3. Verify each .md file returns HTTP 200:",
+        "     curl -I https://yoursite.com/docs/index.md",
+        "",
+        "VERIFY content negotiation is working:",
+        "  curl -H 'Accept: text/markdown' https://yoursite.com/",
+        "  # Response should include: Content-Type: text/markdown",
+        "  curl 'https://yoursite.com/?format=markdown'",
+        "  # Response should include: Content-Type: text/markdown",
       ].join("\n") : undefined,
     });
 

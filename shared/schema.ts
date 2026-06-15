@@ -321,6 +321,8 @@ export interface AiAccessibility {
   cleanTextExtraction: boolean;
   wordCount: number;
   languageDeclared: boolean;
+  markdownReadable: boolean;
+  markdownMethod: 'negotiation' | 'linked-files' | 'none';
 }
 
 export interface SchemaSuggestion {
