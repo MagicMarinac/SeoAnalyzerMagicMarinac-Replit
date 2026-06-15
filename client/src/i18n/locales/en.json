@@ -492,6 +492,16 @@
         }
       }
     },
+    "RefundAndLimitation": {
+      "title": "Right to Refund and Limitation of the Right of Withdrawal",
+      "p1": "Our services are digital services and digital reports delivered electronically. After a successful payment, the user may immediately start the scan, generate the report or download the purchased digital content.",
+      "p2": "If the user is a consumer, they generally have the right to withdraw from a distance contract within 14 days from the date the contract is concluded. However, when the user expressly agrees that the delivery of the digital service may begin immediately after payment and confirms that they understand that they lose the right of withdrawal once delivery has started, the right to a refund due to withdrawal ends when the generation, scanning, delivery or access to the digital report begins.",
+      "p3": "Due to the nature of digital reports, once a report has been generated, delivered, displayed to the user or made available for download, a refund is not available solely because the user changed their mind, entered incorrect information, is dissatisfied for reasons not caused by a technical error, or no longer wishes to use the report.",
+      "p4": "The user still has the right to request a refund or repeat performance of the service if the purchased digital report was not delivered, if it is unavailable due to a technical error, if the generation was unsuccessfully charged without delivery, or if the delivered service has a significant defect compared to the description of the purchased service.",
+      "p5": "Refund requests based on non-delivery, technical error or significant defect must be sent within 14 days of payment to info@magicmarinac.hr, together with the order details, the URL of the analyzed page, contact details and a short description of the issue.",
+      "p6": "Each request is reviewed individually. If the request is justified, we may offer to regenerate the report, correct the technical error, issue a partial refund or issue a full refund, depending on the circumstances of the case and the extent to which the service has been delivered.",
+      "p7": "Approved refunds are issued to the original payment method. We usually process refunds within 2 business days of approval, and no later than within the applicable statutory period where required."
+    },
     "delivery": {
       "title": "Delivery and Fulfillment Policy",
       "intro": "This policy describes how and when digital services are delivered after purchase.",

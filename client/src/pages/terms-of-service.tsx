@@ -70,67 +70,15 @@ export default function TermsOfServicePage() {
             ],
           },
           {
-            title: t("legalPages.refund.title"),
-            paragraphs: [t("legalPages.refund.intro")],
-          },
-          {
-            title: t("legalPages.refund.sections.scope.title"),
+            title: t("legalPages.RefundAndLimitation.title"),
             paragraphs: [
-              t("legalPages.refund.sections.scope.p1"),
-              t("legalPages.refund.sections.scope.p2"),
-            ],
-          },
-          {
-            title: t("legalPages.refund.sections.nonDelivery.title"),
-            paragraphs: [
-              t("legalPages.refund.sections.nonDelivery.p1"),
-              t("legalPages.refund.sections.nonDelivery.p2"),
-            ],
-          },
-          {
-            title: t("legalPages.refund.sections.userCancellation.title"),
-            paragraphs: [
-              t("legalPages.refund.sections.userCancellation.p1"),
-              t("legalPages.refund.sections.userCancellation.p2"),
-            ],
-          },
-          {
-            title: t("legalPages.refund.sections.howToRequest.title"),
-            paragraphs: [
-              t("legalPages.refund.sections.howToRequest.p1"),
-              t("legalPages.refund.sections.howToRequest.p2"),
-            ],
-          },
-          {
-            title: t("legalPages.delivery.title"),
-            paragraphs: [t("legalPages.delivery.intro")],
-          },
-          {
-            title: t("legalPages.delivery.sections.digitalDelivery.title"),
-            paragraphs: [
-              t("legalPages.delivery.sections.digitalDelivery.p1"),
-              t("legalPages.delivery.sections.digitalDelivery.p2"),
-            ],
-          },
-          {
-            title: t("legalPages.delivery.sections.serviceTiming.title"),
-            paragraphs: [
-              t("legalPages.delivery.sections.serviceTiming.p1"),
-              t("legalPages.delivery.sections.serviceTiming.p2"),
-            ],
-          },
-          {
-            title: t("legalPages.delivery.sections.clientResponsibilities.title"),
-            paragraphs: [
-              t("legalPages.delivery.sections.clientResponsibilities.p1"),
-              t("legalPages.delivery.sections.clientResponsibilities.p2"),
-            ],
-          },
-          {
-            title: t("legalPages.delivery.sections.support.title"),
-            paragraphs: [
-              t("legalPages.delivery.sections.support.p1"),
-              t("legalPages.delivery.sections.support.p2"),
+              t("legalPages.RefundAndLimitation.p1"),
+              t("legalPages.RefundAndLimitation.p2"),
+              t("legalPages.RefundAndLimitation.p3"),
+              t("legalPages.RefundAndLimitation.p4"),
+              t("legalPages.RefundAndLimitation.p5"),
+              t("legalPages.RefundAndLimitation.p6"),
+              t("legalPages.RefundAndLimitation.p7"),
             ],
           },
         ]}

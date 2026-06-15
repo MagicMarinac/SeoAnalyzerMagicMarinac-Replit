@@ -492,6 +492,16 @@
         }
       }
     },
+    "RefundAndLimitation": {
+      "title": "Pravo na povrat i ograničenje prava na jednostrani raskid",
+      "p1": "Naše usluge predstavljaju digitalne usluge i digitalne izvještaje koji se isporučuju elektroničkim putem. Nakon uspješne uplate korisnik može odmah pokrenuti skeniranje, generiranje izvještaja ili preuzimanje kupljenog digitalnog sadržaja.",
+      "p2": "Ako je korisnik potrošač, u pravilu ima pravo na jednostrani raskid ugovora sklopljenog na daljinu u roku od 14 dana od sklapanja ugovora. Međutim, kada korisnik izričito pristane da isporuka digitalne usluge započne odmah nakon uplate te potvrdi da je upoznat s time da time gubi pravo na jednostrani raskid nakon početka isporuke, pravo na povrat zbog odustajanja prestaje početkom generiranja, skeniranja, dostave ili omogućavanja pristupa digitalnom izvještaju.",
+      "p3": "Zbog prirode digitalnog izvještaja, nakon što je izvještaj generiran, dostavljen, prikazan korisniku ili učinjen dostupnim za preuzimanje, povrat nije moguć samo zbog promjene odluke korisnika, pogrešno unesenih podataka od strane korisnika, nezadovoljstva koje nije posljedica tehničke pogreške ili činjenice da korisnik više ne želi koristiti izvještaj.",
+      "p4": "Korisnik i dalje ima pravo zatražiti povrat ili ponovno izvršenje usluge ako kupljeni digitalni izvještaj nije isporučen, ako zbog tehničke pogreške nije dostupan, ako je generiranje neuspješno naplaćeno bez isporuke ili ako isporučena usluga ima značajan nedostatak u odnosu na opis kupljene usluge.",
+      "p5": "Zahtjev za povrat zbog neisporuke, tehničke pogreške ili značajnog nedostatka potrebno je poslati u roku od 14 dana od uplate na info@magicmarinac.hr, uz podatke o narudžbi, URL analizirane stranice, kontakt podatke i kratak opis problema.",
+      "p6": "Svaki zahtjev razmatramo pojedinačno. Ako je zahtjev opravdan, možemo ponuditi ponovno generiranje izvještaja, ispravak tehničke pogreške, razmjerni povrat ili potpuni povrat, ovisno o okolnostima slučaja i stupnju isporuke usluge.",
+      "p7": "Odobreni povrat izvršava se na izvorni način plaćanja. U pravilu povrat obrađujemo u roku od 2 radna dana od odobrenja, a najkasnije u zakonskom roku ako je primjenjivo."
+    },
     "delivery": {
       "title": "Politika dostave i ispunjenja usluge",
       "intro": "Ova politika opisuje kako i kada se digitalne usluge isporučuju nakon kupnje.",
