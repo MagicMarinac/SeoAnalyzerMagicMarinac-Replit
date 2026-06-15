@@ -185,7 +185,6 @@ function OverallDashboard({ data, onDownloadPdf, sessionId, paidTier, emailCaptu
   if (data.brokenLinks.data) scores.push({ label: t('master.labels.links'), score: data.brokenLinks.data.score, icon: LinkIcon, color: "#ef4444" });
   if (data.imageOptimization.data) scores.push({ label: t('master.labels.images'), score: data.imageOptimization.data.score, icon: ImageIcon, color: "#10b981" });
   if (data.internalLinking.data) scores.push({ label: t('master.labels.internalLinksShort'), score: data.internalLinking.data.score, icon: Network, color: "#06b6d4" });
-  if (data.sitemapValidator.data) scores.push({ label: t('master.labels.sitemap'), score: data.sitemapValidator.data.score, icon: FileText, color: "#ec4899" });
 
   const avgScore = scores.length > 0 ? Math.round(scores.reduce((s, x) => s + x.score, 0) / scores.length) : 0;
   const overallColor = avgScore >= 80 ? "#10b981" : avgScore >= 50 ? "#f59e0b" : "#ef4444";
@@ -1938,10 +1937,12 @@ function AeoSummary({ data }: { data: any }) {
   );
 }
 
-function AeoSection({ data, url, paidTier, onUpgrade }: { data: any; url: string; paidTier: string; onUpgrade: (tier: 'basic' | 'pro') => void }) {
+function AeoSection({ data, url, paidTier, onUpgrade, sitemapData }: { data: any; url: string; paidTier: string; onUpgrade: (tier: 'basic' | 'pro') => void; sitemapData?: SitemapValidatorResult | null }) {
   const { t } = useTranslation();
   const results = data.results as AeoAnalysisResults;
   const recommendations = data.recommendations as AeoRecommendation[];
+  const robotsTxt = sitemapData?.robotsTxt;
+  const sitemap = sitemapData?.sitemap;
 
   return (
     <div className="space-y-6">
@@ -1959,6 +1960,9 @@ function AeoSection({ data, url, paidTier, onUpgrade }: { data: any; url: string
             <TabsTrigger value="schema">{t('tabs.schema')}</TabsTrigger>
             <TabsTrigger value="content-gaps">{t('tabs.contentGaps')}</TabsTrigger>
             <TabsTrigger value="citation">{t('tabs.citations')}</TabsTrigger>
+            <TabsTrigger value="robots">{t('master.sitemap.robotsTxt')}</TabsTrigger>
+            <TabsTrigger value="sitemap-tab">{t('master.sitemap.sitemap')}</TabsTrigger>
+            <TabsTrigger value="llms">{t('master.sitemap.llmsTab')}</TabsTrigger>
             <TabsTrigger value="compare">{t('tabs.compare')}</TabsTrigger>
           </TabsList>
 
@@ -1987,6 +1991,158 @@ function AeoSection({ data, url, paidTier, onUpgrade }: { data: any; url: string
 
           <TabsContent value="citation">
             <AeoCitationCard citation={results.citationLikelihood} />
+          </TabsContent>
+
+          <TabsContent value="robots">
+            {sitemapData ? (
+              robotsTxt?.exists ? (
+                <Card data-testid="robots-details">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2"><Bot className="w-5 h-5" />{t('master.sitemap.robotsAnalysis')}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div>
+                        <p className="text-sm font-medium">{t('master.sitemap.userAgents')}</p>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {robotsTxt.userAgents.map((ua: string, i: number) => (<Badge key={i} variant="secondary" className="text-xs">{ua}</Badge>))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{t('master.sitemap.disallowedPaths')}</p>
+                        <p className="text-sm text-muted-foreground">{t('master.sitemap.rulesCount', { count: robotsTxt.disallowedPaths.length })}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{t('master.sitemap.sitemapReferences')}</p>
+                        <p className="text-sm text-muted-foreground">{t('master.sitemap.foundCount', { count: robotsTxt.sitemapReferences.length })}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{t('master.common.status')}</p>
+                        <div className="flex flex-col gap-1 mt-1">
+                          {robotsTxt.hasWildcardBlock && <Badge variant="destructive" className="text-xs w-fit">{t('master.sitemap.wildcardBlock')}</Badge>}
+                          {robotsTxt.blocksImportantPaths && <Badge variant="destructive" className="text-xs w-fit">{t('master.sitemap.blocksImportantPaths')}</Badge>}
+                          {!robotsTxt.hasWildcardBlock && !robotsTxt.blocksImportantPaths && <Badge className="text-xs w-fit bg-green-500">{t('master.sitemap.clean')}</Badge>}
+                        </div>
+                      </div>
+                    </div>
+                    {robotsTxt.disallowedPaths.length > 0 && (
+                      <div>
+                        <p className="text-sm font-medium mb-1">{t('master.sitemap.disallowedPathsLabel')}</p>
+                        <div className="flex flex-wrap gap-1">
+                          {robotsTxt.disallowedPaths.map((p: string, i: number) => (<Badge key={i} variant="outline" className="text-xs font-mono">{p}</Badge>))}
+                        </div>
+                      </div>
+                    )}
+                    {robotsTxt.issues.length > 0 && (
+                      <div>
+                        <p className="text-sm font-medium mb-1 text-yellow-600">{t('master.common.issues')}:</p>
+                        <ul className="space-y-1">
+                          {robotsTxt.issues.map((issue: string, i: number) => (
+                            <li key={i} className="text-sm flex items-start gap-2"><AlertTriangle className="w-4 h-4 text-yellow-500 mt-0.5 shrink-0" />{issue}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="flex items-center gap-2 p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
+                  <XCircle className="w-5 h-5 text-red-600" />
+                  <span className="text-sm text-red-800 dark:text-red-200">{t('master.sitemap.noRobotsFound')}</span>
+                </div>
+              )
+            ) : (
+              <p className="text-sm text-muted-foreground p-4">{t('master.common.notAvailable')}</p>
+            )}
+          </TabsContent>
+
+          <TabsContent value="sitemap-tab">
+            {sitemapData ? (
+              sitemap?.exists ? (
+                <Card data-testid="sitemap-details">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2"><Map className="w-5 h-5" />{t('master.sitemap.sitemapAnalysis')}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                      <div><p className="text-lg font-bold">{sitemap.urlCount}</p><p className="text-xs text-muted-foreground">{t('master.sitemap.urls')}</p></div>
+                      <div><StatusIconTri status={sitemap.hasLastmod ? "pass" : "warning"} /><p className="text-xs text-muted-foreground mt-1">{t('master.sitemap.lastmod')}</p></div>
+                      <div><StatusIconTri status={sitemap.hasChangefreq ? "pass" : "warning"} /><p className="text-xs text-muted-foreground mt-1">{t('master.sitemap.changefreq')}</p></div>
+                      <div><StatusIconTri status={sitemap.hasPriority ? "pass" : "warning"} /><p className="text-xs text-muted-foreground mt-1">{t('master.sitemap.priority')}</p></div>
+                    </div>
+                    {sitemap.isSitemapIndex && (
+                      <div>
+                        <p className="text-sm font-medium mb-1">{t('master.sitemap.sitemapIndexChildSitemaps')}</p>
+                        <div className="space-y-1">
+                          {sitemap.childSitemaps.slice(0, 10).map((sm: string, i: number) => (<p key={i} className="text-xs font-mono truncate text-muted-foreground">{sm}</p>))}
+                        </div>
+                      </div>
+                    )}
+                    {sitemap.sampleUrls.length > 0 && !sitemap.isSitemapIndex && (
+                      <div>
+                        <p className="text-sm font-medium mb-1">{t('master.sitemap.sampleUrls')}</p>
+                        <div className="space-y-1">
+                          {sitemap.sampleUrls.slice(0, 5).map((u: string, i: number) => (<p key={i} className="text-xs font-mono truncate text-muted-foreground">{u}</p>))}
+                        </div>
+                      </div>
+                    )}
+                    {sitemap.issues.length > 0 && (
+                      <div>
+                        <p className="text-sm font-medium mb-1 text-yellow-600">{t('master.common.issues')}:</p>
+                        <ul className="space-y-1">
+                          {sitemap.issues.map((issue: string, i: number) => (
+                            <li key={i} className="text-sm flex items-start gap-2"><AlertTriangle className="w-4 h-4 text-yellow-500 mt-0.5 shrink-0" />{issue}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="flex items-center gap-2 p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
+                  <XCircle className="w-5 h-5 text-red-600" />
+                  <span className="text-sm text-red-800 dark:text-red-200">{t('master.sitemap.noSitemapFound')}</span>
+                </div>
+              )
+            ) : (
+              <p className="text-sm text-muted-foreground p-4">{t('master.common.notAvailable')}</p>
+            )}
+          </TabsContent>
+
+          <TabsContent value="llms">
+            <Card data-testid="sitemap-llms">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2"><Bot className="w-5 h-5" />{t('master.sitemap.llmsAnalysis')}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {sitemapData?.llmsFiles ? (
+                  [
+                    { key: 'llmsTxt', label: 'llms.txt', desc: t('master.sitemap.llmsTxtDesc'), file: sitemapData.llmsFiles.llmsTxt },
+                    { key: 'llmsFullTxt', label: 'llms-full.txt', desc: t('master.sitemap.llmsFullTxtDesc'), file: sitemapData.llmsFiles.llmsFullTxt },
+                    { key: 'llmInfoJson', label: 'llm-info.json', desc: t('master.sitemap.llmInfoJsonDesc'), file: sitemapData.llmsFiles.llmInfoJson },
+                    { key: 'knowledge', label: t('master.sitemap.knowledgeEndpoint'), desc: t('master.sitemap.knowledgeEndpointDesc'), file: sitemapData.llmsFiles.knowledgeEndpoint },
+                  ].map(item => (
+                    <div key={item.key} className="flex items-start gap-3 p-3 rounded-lg border bg-muted/30">
+                      {item.file.exists
+                        ? <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+                        : <XCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-mono text-sm font-medium">{item.label}</span>
+                          <Badge variant={item.file.exists ? "default" : "secondary"} className={item.file.exists ? "bg-green-500 text-white text-[10px]" : "text-[10px]"}>
+                            {item.file.exists ? t('master.common.found') : t('master.common.missing')}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
+                        {item.file.exists && <p className="text-xs font-mono text-muted-foreground mt-1 truncate">{item.file.url}</p>}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">{t('master.common.notAvailable')}</p>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="compare">
@@ -4339,7 +4495,6 @@ export default function MasterAnalyzerPage() {
     { icon: LinkIcon, label: t('master.labels.links'), color: "#ef4444" },
     { icon: ImageIcon, label: t('master.labels.images'), color: "#10b981" },
     { icon: Network, label: t('master.labels.internalLinksShort'), color: "#06b6d4" },
-    { icon: FileText, label: t('master.labels.sitemap'), color: "#ec4899" },
   ];
 
   return (
@@ -4584,7 +4739,7 @@ export default function MasterAnalyzerPage() {
 
             <SectionCard title={t('sections.aeo')} icon={Brain} score={result.aeo.data ? (result.aeo.data.results as AeoAnalysisResults).score : null} error={result.aeo.error} testId="master-aeo" color="#8b5cf6"
               summaryContent={result.aeo.data && <AeoSummary data={result.aeo.data} />}>
-              {result.aeo.data && <AeoSection data={result.aeo.data} url={result.url} paidTier={paidTier} onUpgrade={openPricingModal} />}
+              {result.aeo.data && <AeoSection data={result.aeo.data} url={result.url} paidTier={paidTier} onUpgrade={openPricingModal} sitemapData={result.sitemapValidator.data} />}
             </SectionCard>
 
             <SectionCard title={t('sections.geo')} icon={Atom} score={result.geo.data ? (result.geo.data.results as GeoAnalysisResults).score : null} error={result.geo.error} testId="master-geo" color="#14b8a6"
@@ -4617,10 +4772,6 @@ export default function MasterAnalyzerPage() {
               {result.internalLinking.data && <InternalLinkSection data={result.internalLinking.data} paidTier={paidTier} onUpgrade={openPricingModal} />}
             </SectionCard>
 
-            <SectionCard title={t('sections.sitemap')} icon={FileText} score={result.sitemapValidator.data?.score ?? null} error={result.sitemapValidator.error} testId="master-sitemap" color="#ec4899"
-              summaryContent={result.sitemapValidator.data && <SitemapSummary data={result.sitemapValidator.data} />}>
-              {result.sitemapValidator.data && <SitemapSection data={result.sitemapValidator.data} paidTier={paidTier} onUpgrade={openPricingModal} />}
-            </SectionCard>
           </div>
         )}
 

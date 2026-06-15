@@ -76,7 +76,7 @@
   },
   "loading": {
     "title": "Pokrećem svih 8 alata za analizu...",
-    "description": "Ovo pokreće SEO, Ads, AEO, GEO, provjeru linkova, slika, internih linkova i mape stranica paralelno. Može potrajati do jedne minute."
+    "description": "Ovo pokreće SEO, Ads, AEO (uklj. Sitemap/Robots/LLMs), GEO, provjeru linkova, slika i internih linkova paralelno. Može potrajati do jedne minute."
   },
   "dashboard": {
     "overall": "UKUPNO",

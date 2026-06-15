@@ -1993,7 +1993,6 @@ export async function generateMasterPdfReport(data: MasterResult, tier: 'free' |
       if (data.brokenLinks?.data)      toolList.push({ key: 'links',    score: data.brokenLinks.data.score ?? 0,          data: data.brokenLinks.data });
       if (data.imageOptimization?.data)toolList.push({ key: 'images',   score: data.imageOptimization.data.score ?? 0,    data: data.imageOptimization.data });
       if (data.internalLinking?.data)  toolList.push({ key: 'internal', score: data.internalLinking.data.score ?? 0,      data: data.internalLinking.data });
-      if (data.sitemapValidator?.data) toolList.push({ key: 'sitemap',  score: data.sitemapValidator.data.score ?? 0,     data: data.sitemapValidator.data });
 
       const overallAvg = toolList.length > 0
         ? Math.round(toolList.reduce((s, t) => s + t.score, 0) / toolList.length)
@@ -2272,9 +2271,6 @@ export async function generateMasterPdfReport(data: MasterResult, tier: 'free' |
       }
       if (data.internalLinking?.data) {
         renderToolSection('internal', L.toolNames.internal, data.internalLinking.data.score ?? 0, data.internalLinking.data, data.internalLinking.data.recommendations);
-      }
-      if (data.sitemapValidator?.data) {
-        renderToolSection('sitemap', L.toolNames.sitemap, data.sitemapValidator.data.score ?? 0, data.sitemapValidator.data, data.sitemapValidator.data.recommendations);
       }
 
       // ── BASIC: soft Pro upsell at the end ──

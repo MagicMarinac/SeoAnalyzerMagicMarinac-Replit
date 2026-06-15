@@ -468,16 +468,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const [seo, ads, aeo, geo, brokenLinks, imageOpt, internalLinks, sitemapValidator] = results;
 
+      const aeoExtracted = extract(aeo);
+      const sitemapExtracted = extract(sitemapValidator);
+
+      // Blend sitemap score (20%) into AEO score (80%) so the dashboard shows 7 circles
+      if (aeoExtracted.data?.results && sitemapExtracted.data) {
+        const rawAeo = (aeoExtracted.data.results as any).score ?? 0;
+        const rawSitemap = sitemapExtracted.data.score ?? 0;
+        (aeoExtracted.data.results as any).score = Math.round(rawAeo * 0.8 + rawSitemap * 0.2);
+      }
+
       const masterResult = {
         url,
         seo: extract(seo),
         ads: extract(ads),
-        aeo: extract(aeo),
+        aeo: aeoExtracted,
         geo: extract(geo),
         brokenLinks: extract(brokenLinks),
         imageOptimization: extract(imageOpt),
         internalLinking: extract(internalLinks),
-        sitemapValidator: extract(sitemapValidator),
+        sitemapValidator: sitemapExtracted,
       };
 
       const sessionId = storeAnalysis(masterResult);
