@@ -2259,6 +2259,11 @@ export async function generateMasterPdfReport(data: MasterResult, tier: 'free' |
       }
       if (data.aeo?.data) {
         renderToolSection('aeo', L.toolNames.aeo, data.aeo.data.results?.score ?? 0, data.aeo.data, data.aeo.data.recommendations);
+        // Sitemap/Robots/LLMs checks are merged into the AEO section (score already
+        // blended 80/20 server-side). Render the sitemap sub-block directly after AEO.
+        if (data.sitemapValidator?.data) {
+          renderToolSection('sitemap', L.toolNames.sitemap, data.sitemapValidator.data.score ?? 0, data.sitemapValidator.data, data.sitemapValidator.data.recommendations);
+        }
       }
       if (data.geo?.data) {
         renderToolSection('geo', L.toolNames.geo, data.geo.data.results?.score ?? 0, data.geo.data, data.geo.data.recommendations);
