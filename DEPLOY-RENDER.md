@@ -1,6 +1,6 @@
 # Deploying FreeSiteAnalyzer on Render.com
 
-Step-by-step guide to deploy this application on Render.com with a custom domain like `seo.magicmarinac.hr`.
+Step-by-step guide to deploy this application on Render.com with a custom domain like `search.magicmarinac.hr`.
 
 ---
 
@@ -127,14 +127,14 @@ Still on the service creation page, scroll to **"Environment Variables"** and ad
 
 ---
 
-## Step 7: Set Up Your Custom Domain (seo.magicmarinac.hr)
+## Step 7: Set Up Your Custom Domain (search.magicmarinac.hr)
 
 ### 7a. Add the Domain in Render
 
 1. Go to your web service's **Settings** tab in Render
 2. Scroll to **"Custom Domains"**
 3. Click **"Add Custom Domain"**
-4. Enter: `seo.magicmarinac.hr`
+4. Enter: `search.magicmarinac.hr`
 5. Render will show you DNS records to configure
 
 ### 7b. Configure DNS Records
@@ -172,7 +172,7 @@ If your DNS is managed by Cloudflare:
 
 ### 7e. Verify the Custom Domain
 
-1. Visit `https://seo.magicmarinac.hr`
+1. Visit `https://search.magicmarinac.hr`
 2. Confirm the SSL certificate is valid (padlock icon in browser)
 3. Test the full app functionality
 
@@ -184,7 +184,7 @@ After setting up your custom domain, update your Turnstile widget:
 
 1. Go to [dash.cloudflare.com/turnstile](https://dash.cloudflare.com/turnstile)
 2. Select your Turnstile widget
-3. Under **"Hostname"**, add `seo.magicmarinac.hr`
+3. Under **"Hostname"**, add `search.magicmarinac.hr`
 4. Save changes
 
 ---
@@ -194,7 +194,7 @@ After setting up your custom domain, update your Turnstile widget:
 After deployment, update your myPOS notification URLs:
 
 1. In your myPOS merchant dashboard, update the notification URL to:
-   `https://seo.magicmarinac.hr/api/mypos-notify`
+   `https://search.magicmarinac.hr/api/mypos-notify`
 2. The app automatically constructs success/cancel URLs based on the request host, so those will work automatically with the custom domain
 
 ---

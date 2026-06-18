@@ -1,4 +1,4 @@
-const SITE_ORIGIN = process.env.PUBLIC_SITE_ORIGIN || "https://freesiteanalyzer.eu";
+const SITE_ORIGIN = process.env.PUBLIC_SITE_ORIGIN || "https://search.magicmarinac.hr";
 
 const COMPANY = `Magićmarinac d.o.o., Tuškanova 24, 10000 Zagreb, Croatia — OIB: 35536574301 — info@magicmarinac.hr`;
 

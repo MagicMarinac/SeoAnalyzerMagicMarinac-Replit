@@ -1,6 +1,6 @@
 # Deploying FreeSiteAnalyzer on Hetzner Cloud VPS
 
-Step-by-step guide to deploy this application on a Hetzner Cloud server with a custom domain like `seo.magicmarinac.hr`.
+Step-by-step guide to deploy this application on a Hetzner Cloud server with a custom domain like `search.magicmarinac.hr`.
 
 **Estimated time:** 30-45 minutes  
 **Recommended plan:** CX22 (~€4.51/month) — 2 vCPU, 4 GB RAM, 40 GB SSD  
@@ -318,7 +318,7 @@ Paste this config:
 ```nginx
 server {
     listen 80;
-    server_name seo.magicmarinac.hr;
+    server_name search.magicmarinac.hr;
 
     location / {
         proxy_pass http://127.0.0.1:5000;
@@ -394,10 +394,10 @@ For example, if your server IP is `116.203.45.67`:
 This usually takes 5-15 minutes. Test it:
 
 ```bash
-dig seo.magicmarinac.hr
+dig search.magicmarinac.hr
 ```
 
-Or visit `http://seo.magicmarinac.hr` — you should see your app (without HTTPS for now).
+Or visit `http://search.magicmarinac.hr` — you should see your app (without HTTPS for now).
 
 ---
 
@@ -412,7 +412,7 @@ sudo apt install -y certbot python3-certbot-nginx
 ### 12b. Get the certificate
 
 ```bash
-sudo certbot --nginx -d seo.magicmarinac.hr
+sudo certbot --nginx -d search.magicmarinac.hr
 ```
 
 - Enter your email when asked
@@ -422,7 +422,7 @@ sudo certbot --nginx -d seo.magicmarinac.hr
 
 ### 12c. Verify HTTPS
 
-Visit `https://seo.magicmarinac.hr` — you should see your app with a padlock icon.
+Visit `https://search.magicmarinac.hr` — you should see your app with a padlock icon.
 
 ### 12d. Auto-renewal
 
@@ -442,13 +442,13 @@ Certificates renew automatically every 90 days — you don't need to do anything
 
 1. Go to [dash.cloudflare.com/turnstile](https://dash.cloudflare.com/turnstile)
 2. Select your Turnstile widget
-3. Add `seo.magicmarinac.hr` to the allowed hostnames
+3. Add `search.magicmarinac.hr` to the allowed hostnames
 4. Save
 
 ### myPOS
 
 1. In your myPOS merchant dashboard, ensure the notification URL points to:
-   `https://seo.magicmarinac.hr/api/mypos-notify`
+   `https://search.magicmarinac.hr/api/mypos-notify`
 2. Success/cancel URLs are generated automatically by the app based on the request host
 
 ---
@@ -633,7 +633,7 @@ Check for errors. Common issues:
 1. Check the app is running: `pm2 status`
 2. Check nginx is running: `sudo systemctl status nginx`
 3. Check firewall allows traffic: `ufw status`
-4. Check DNS is pointing to the right IP: `dig seo.magicmarinac.hr`
+4. Check DNS is pointing to the right IP: `dig search.magicmarinac.hr`
 
 ### SSL certificate issues
 

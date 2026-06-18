@@ -1031,7 +1031,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ----------------------------------------------------------------------------
   // SEO: robots.txt, sitemap.xml, llms.txt
   // ----------------------------------------------------------------------------
-  const SITE_ORIGIN = process.env.PUBLIC_SITE_ORIGIN || "https://freesiteanalyzer.eu";
+  const SITE_ORIGIN = process.env.PUBLIC_SITE_ORIGIN || "https://search.magicmarinac.hr";
   const PUBLIC_PAGES = [
     { loc: "/", changefreq: "weekly", priority: "1.0" },
     { loc: "/ads-analyzer", changefreq: "weekly", priority: "0.8" },
