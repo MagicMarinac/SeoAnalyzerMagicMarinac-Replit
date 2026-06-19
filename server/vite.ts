@@ -157,7 +157,7 @@ export function serveStatic(app: Express) {
     console.log(`[static-content] dist/static_content already present, skipping copy`);
   }
 
-  app.use(express.static(distPath));
+  app.use(express.static(distPath, { index: false }));
 
   app.use("*", async (req, res) => {
     try {
