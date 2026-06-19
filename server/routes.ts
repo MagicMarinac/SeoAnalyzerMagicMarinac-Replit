@@ -1173,23 +1173,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       `- GEO (Generative Engine Optimization): readiness for ChatGPT, Perplexity and Google AI Overviews.\n` +
       `- Google Ads landing-page experience: TTFB, CDN, cache, redirects, hosting, mobile UX, ad-copy quality rater.\n\n` +
       `## Key URLs\n` +
-      `- Home: ${SITE_ORIGIN}/\n` +
-      `- Sitemap: ${SITE_ORIGIN}/sitemap.xml\n` +
-      `- Markdown Sitemap: ${SITE_ORIGIN}/sitemap-markdown.txt\n` +
-      `- Privacy: ${SITE_ORIGIN}/privacy-policy\n` +
-      `- Terms: ${SITE_ORIGIN}/terms-of-service\n\n` +
+      `- [Home](${SITE_ORIGIN}/): FreeSiteAnalyzer homepage\n` +
+      `- [Sitemap](${SITE_ORIGIN}/sitemap.xml): FreeSiteAnalyzer sitemap\n` +
+      `- [Markdown Sitemap](${SITE_ORIGIN}/sitemap-markdown.txt): FreeSiteAnalyzer sitemap in markdown\n` +
+      `- [Privacy](${SITE_ORIGIN}/privacy-policy): FreeSiteAnalyzer Privacy Policy page\n` +
+      `- [Terms](${SITE_ORIGIN}/terms-of-service): FreeSiteAnalyzer Terms of Service page\n\n` +
       `## AI Resources\n` +
-      `${SITE_ORIGIN}/llm-info.json\n\n` +
+      `- [LLM Info JSON](${SITE_ORIGIN}/llm-info.json): FreeSiteAnalyzer llm-info.json file\n\n` +
       `## Structured Knowledge\n` +
-      `${SITE_ORIGIN}/api/ai/knowledge.json\n\n` +
+      `- [Knowledge](${SITE_ORIGIN}/api/ai/knowledge.json): FreeSiteAnalyzer Structured knowledge endpoint\n\n` +
       `## Languages\n` +
       `English (en) and Croatian (hr). Append ?lang=hr for the Croatian version.\n\n` +
       `## Markdown Content Negotiation\n` +
       `Every page returns clean markdown when requested with Accept: text/markdown or ?format=markdown.\n` +
       `Examples:\n` +
-      `${SITE_ORIGIN}/?format=markdown\n` +
-      `${SITE_ORIGIN}/privacy-policy?format=markdown\n` +
-      `${SITE_ORIGIN}/terms-of-service?format=markdown\n`;
+      `- [Markdown Home](${SITE_ORIGIN}/?format=markdown): FreeSiteAnalyzer homepage in markdown\n` +
+      `- [Markdown Privacy](${SITE_ORIGIN}/privacy-policy?format=markdown): FreeSiteAnalyzer Privacy Policy page in markdown\n` +
+      `- [Markdown Terms](${SITE_ORIGIN}/terms-of-service?format=markdown): FreeSiteAnalyzer Terms of Service page in markdown\n`;
     res.type("text/plain; charset=utf-8").set("Cache-Control", "public, max-age=3600").send(body);
   });
 
@@ -1254,18 +1254,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       `- Email: Mailchimp Marketing API v3\n` +
       `- Bot protection: Cloudflare Turnstile\n\n` +
       `## Key URLs\n\n` +
-      `- Home: ${SITE_ORIGIN}/\n` +
-      `- Privacy Policy: ${SITE_ORIGIN}/privacy-policy\n` +
-      `- Terms of Service: ${SITE_ORIGIN}/terms-of-service\n` +
-      `- Refund & Cancellation Policy: ${SITE_ORIGIN}/refund-cancellation-policy\n` +
-      `- Delivery & Fulfilment: ${SITE_ORIGIN}/delivery-fulfillment\n` +
-      `- Sitemap: ${SITE_ORIGIN}/sitemap.xml\n` +
-      `- Robots: ${SITE_ORIGIN}/robots.txt\n\n` +
+      `- [Home](${SITE_ORIGIN}/): FreeSiteAnalyzer homepage\n` +
+      `- [Privacy Policy](${SITE_ORIGIN}/privacy-policy): FreeSiteAnalyzer Privacy Policy page\n` +
+      `- [Terms of Service](${SITE_ORIGIN}/terms-of-service): FreeSiteAnalyzer Terms of Service page\n` +
+      `- [Refund & Cancellation Policy](${SITE_ORIGIN}/refund-cancellation-policy): FreeSiteAnalyzer Refund & Cancellation Policy page\n` +
+      `- [Delivery & Fulfilment](${SITE_ORIGIN}/delivery-fulfillment): FreeSiteAnalyzer Delivery & Fulfilment page\n` +
+      `- [Sitemap](${SITE_ORIGIN}/sitemap.xml): FreeSiteAnalyzer sitemap\n` +
+      `- [Robots](${SITE_ORIGIN}/robots.txt): FreeSiteAnalyzer robots.txt file\n\n` +
       `## AI & Machine Learning Resources\n\n` +
-      `- Concise summary (llmstxt.org): ${SITE_ORIGIN}/llms.txt\n` +
-      `- Full summary (this file): ${SITE_ORIGIN}/llms-full.txt\n` +
-      `- Structured knowledge endpoint: ${SITE_ORIGIN}/api/ai/knowledge.json\n` +
-      `- LLM info JSON: ${SITE_ORIGIN}/llm-info.json\n\n` +
+      `- [Concise summary (llmstxt.org)](${SITE_ORIGIN}/llms.txt)\n` +
+      `- [Full summary (this file)](${SITE_ORIGIN}/llms-full.txt)\n` +
+      `- [Knowledge)](${SITE_ORIGIN}/api/ai/knowledge.json): FreeSiteAnalyzer Structured knowledge endpoint\n` +
+      `- [LLM Info JSON](${SITE_ORIGIN}/llm-info.json): FreeSiteAnalyzer llm-info.json file\n\n` +
       `## Languages\n\n` +
       `English (en) is the default. Croatian (hr) is fully supported. ` +
       `The UI language can be toggled in the header and is persisted via localStorage. ` +
@@ -1274,9 +1274,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       `## Markdown Content Negotiation\n` +
       `Every page returns clean markdown when requested with Accept: text/markdown or ?format=markdown.\n` +
       `Examples:\n` +
-      `${SITE_ORIGIN}/?format=markdown\n` +
-      `${SITE_ORIGIN}/privacy-policy?format=markdown\n` +
-      `${SITE_ORIGIN}/terms-of-service?format=markdown\n`;
+      `- [Markdown Home](${SITE_ORIGIN}/?format=markdown): FreeSiteAnalyzer homepage in markdown\n` +
+      `- [Markdown Privacy](${SITE_ORIGIN}/privacy-policy?format=markdown): FreeSiteAnalyzer Privacy Policy page in markdown\n` +
+      `- [Markdown Terms](${SITE_ORIGIN}/terms-of-service?format=markdown): FreeSiteAnalyzer Terms of Service page in markdown\n`;
     res.type("text/plain; charset=utf-8").set("Cache-Control", "public, max-age=3600").send(body);
   });
 
