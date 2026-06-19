@@ -116,6 +116,27 @@ export function serveStatic(app: Express) {
     );
   }
 
+  // Ensure static_content is co-located with the bundle so loadStaticContent
+  // always finds it via candidate 1 — regardless of cwd or deployment layout.
+  const staticContentDst = path.resolve(import.meta.dirname, "static_content");
+  if (!fs.existsSync(staticContentDst)) {
+    const candidates = [
+      path.resolve(import.meta.dirname, "..", "server", "static_content"),
+      path.resolve(process.cwd(), "server", "static_content"),
+    ];
+    for (const src of candidates) {
+      if (fs.existsSync(src)) {
+        try {
+          fs.cpSync(src, staticContentDst, { recursive: true });
+          console.log(`[static-content] copied from ${src} → ${staticContentDst}`);
+        } catch (e) {
+          console.warn(`[static-content] copy failed: ${e}`);
+        }
+        break;
+      }
+    }
+  }
+
   app.use(express.static(distPath));
 
   app.use("*", async (req, res) => {
