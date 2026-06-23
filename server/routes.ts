@@ -834,6 +834,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         host: req.get('host'),
         baseUrl,
       });
+      console.log({
+        production: process.env.MYPOS_PRODUCTION,
+        sid: process.env.MYPOS_SID,
+        wallet: process.env.MYPOS_WALLET,
+      });
       const result = createMyPOSCheckoutForm({
         sessionId,
         tier,
