@@ -263,6 +263,7 @@ export function createMyPOSCheckoutForm(params: {
     signatureMode: 'docs_base64_dash_joined_values_rsa_sha256',
   });
 
+  console.log('========== MYPOS CHECKOUT CALLED ==========');
   console.log(
     JSON.stringify(fields, null, 2)
   );
