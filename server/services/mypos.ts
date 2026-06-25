@@ -263,6 +263,10 @@ export function createMyPOSCheckoutForm(params: {
     signatureMode: 'docs_base64_dash_joined_values_rsa_sha256',
   });
 
+  console.log(
+    JSON.stringify(fields, null, 2)
+  );
+
   return {
     url: USE_SANDBOX ? SANDBOX_URL : PRODUCTION_URL,
     fields,
