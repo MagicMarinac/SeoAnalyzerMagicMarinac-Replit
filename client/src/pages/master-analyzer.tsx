@@ -4570,7 +4570,7 @@ export default function MasterAnalyzerPage() {
                 <Search className="text-primary-foreground w-4 h-4" />
               </div>
               <div className="flex flex-col leading-tight">
-                <h1 className="text-xl font-bold text-foreground">{t('header.title')}</h1>
+                <span className="text-xl font-bold text-foreground">{t('header.title')}</span>
                 <span className="text-[11px] font-medium tracking-wide text-muted-foreground" data-testid="text-header-slogan">{t('header.slogan')}</span>
               </div>
             </div>

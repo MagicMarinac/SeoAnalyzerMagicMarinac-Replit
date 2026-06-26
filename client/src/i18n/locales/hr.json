@@ -1282,21 +1282,21 @@
         "a": "Da. I Basic i Pro dolaze s jamstvom povrata novca u roku od 14 dana od dana uplate, ako usluga nije isporučena ili ima značajan nedostatak. Ako vam izvještaj ne donese konkretne uvide, kontaktirajte podršku i vraćamo vam novac. Jednokratno plaćanje, bez pretplate, bez sitnih slova."
       },
       "howFixes": {
-        "q": "Kako brzo popraviti SEO probleme — daje li FreeSiteAnalyzer gotov kod?",
-        "a": "Da. Za svaki problem koji pronađemo, Pro uključuje gotovo rješenje: točan title tag, meta description, JSON-LD blok, robots direktivu, image alt tekst ili HTML isječak koji vaš developer (ili vi) može odmah ubaciti u stranicu. Uz svako rješenje ide kratki vodič korak po korak — gdje ide i zašto je važno."
+        "q": "Kako brzo popraviti SEO probleme — daje li FreeSiteAnalyzer gotova rješenja?",
+        "a": "Pro izvještaj daje konkretne preporuke, primjere i tehničke smjernice za svaki važniji problem koji analiza pronađe. Umjesto generičke poruke poput “popravite meta opis”, izvještaj objašnjava zašto je problem važan, što treba promijeniti i kako bi dobro rješenje moglo izgledati. Primjeri mogu uključivati strukturu meta opisa, prijedlog HTML isječka, primjer schema markupa, smjernice za alt tekst, robots direktive ili bolju strukturu sadržaja. Rješenja nisu uvijek doslovni copy-paste kod, jer svaki web ima drugačiji CMS, temu, strukturu i sadržaj. Cilj Pro izvještaja je dati dovoljno jasne i konkretne upute da developer, SEO stručnjak ili vlasnik stranice može brže donijeti ispravnu odluku i implementirati popravke bez nagađanja."
       }
     }
   },
   "upgradeCta": {
     "eyebrow": "Besplatno skeniranje → Pro izvještaj",
     "title": "Pokrenite besplatno skeniranje. Nadogradite na Pro za potpunu listu rješenja.",
-    "description": "Besplatno skeniranje gotovo je za manje od 30 sekundi — odmah vidite ukupnu ocjenu i ključne probleme. Nadogradite na Pro €29 i otključajte cijeli PDF izvještaj, 10 skeniranja i gotov kod za svaki pronađeni problem.",
+    "description": "Besplatno skeniranje gotovo je za manje od 30 sekundi — odmah vidite ukupnu ocjenu i ključne probleme. Nadogradite na Pro €29 i otključajte cijeli PDF izvještaj, 10 skeniranja i prijedlog koda za svaki pronađeni problem.",
     "button": "Pokreni skeniranje",
     "hint": "Bez registracije · Jednokratna kupnja, bez pretplate · Jamstvo povrata novca",
     "perks": {
       "pdf": "PDF izvještaj koji možete podijeliti s timom, klijentom ili vašim developerom",
       "scans": "10 Pro skeniranja uključeno — provjerite ponovno nakon svakog popravka",
-      "fixes": "Gotov kod i upute korak po korak za rješavanje svakog problema"
+      "fixes": "Prijedlog koda i upute korak po korak za rješavanje svakog problema"
     }
   },
   "seo": {

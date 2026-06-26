@@ -1283,20 +1283,20 @@
       },
       "howFixes": {
         "q": "How do I fix SEO issues fast — does FreeSiteAnalyzer give me ready-to-paste code?",
-        "a": "Yes. For every issue we find, Pro includes a ready-to-paste solution: the exact title tag, meta description, JSON-LD block, robots directive, image alt text, or HTML snippet your developer (or you) can drop straight into the site. Each fix comes with a short step-by-step explaining where it goes and why it matters."
+        "a": "The Pro report provides actionable recommendations, examples, and technical guidance for every significant issue identified during the analysis. Instead of displaying generic messages such as “fix your meta description,” it explains why the issue matters, what should be changed, and what an effective solution might look like. Examples may include a recommended meta description structure, an HTML snippet, Schema markup examples, alt text guidelines, robots directives, or suggestions for improving content structure. The recommendations are not always provided as ready-to-use code, since every website has a different CMS, theme, structure, and content. The goal of the Pro report is to provide clear, practical guidance that helps developers, SEO professionals, and website owners make informed decisions and implement improvements more quickly and confidently."
       }
     }
   },
   "upgradeCta": {
     "eyebrow": "Free scan → Pro report",
     "title": "Start your free scan. Upgrade to Pro for the full fix list.",
-    "description": "Run a free scan in under 30 seconds — you'll see your overall score and the top issues. Upgrade to Pro €29 to unlock the complete PDF report, 10 scans, and copy-paste fixes for every problem we find.",
+    "description": "Run a free scan in under 30 seconds — you'll see your overall score and the top issues. Upgrade to Pro €29 to unlock the complete PDF report, 10 scans, and suggested code fixes for every problem we find.",
     "button": "Start scanning",
     "hint": "No signup · One-time payment, no subscription · Moneyback guarantee",
     "perks": {
       "pdf": "PDF report you can share with your team, client, or developer",
       "scans": "10 Pro scans included — re-test after every fix",
-      "fixes": "Ready-to-paste code & step-by-step fix instructions"
+      "fixes": "Code suggestions & step-by-step fix instructions"
     }
   },
   "seo": {
